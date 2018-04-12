@@ -226,7 +226,6 @@
     <Compile Include="SplashActivity.cs" />
     <Compile Include="Services\LoggerService.cs" />
     <Compile Include="Services\LyftService.cs" />
-    <Compile Include="Services\LocalBundleFileService.cs" />
     <Compile Include="Services\UberService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -244,18 +243,9 @@
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\icon.png" />
-    <AndroidResource Include="Resources\drawable\TwitterLogo.png" />
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />
     <AndroidResource Include="Resources\drawable\LyftToolbar.png" />
-    <AndroidResource Include="Resources\drawable\PhotosToolbar.png" />
-    <AndroidResource Include="Resources\drawable\About.png" />
-    <AndroidResource Include="Resources\drawable\News.png" />
-    <AndroidResource Include="Resources\drawable\PaperPlane.png" />
-    <AndroidResource Include="Resources\drawable\Smartphones.png" />
-    <AndroidResource Include="Resources\drawable\Tickets.png" />
-    <AndroidResource Include="Resources\drawable\Privacy.png" />
     <AndroidResource Include="Resources\drawable\UberToolbar.png" />
-    <AndroidResource Include="Resources\drawable\Settings.png" />
     <AndroidResource Include="Resources\drawable\HGMFsplash.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\HGMFsplash.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\HGMFsplash.png" />

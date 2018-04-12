@@ -9,12 +9,14 @@ namespace HGMF2018.iOS
 {
 	public class UberService : IUberService
 	{
+        const string UBER_CLIENT_ID = "";
+
 		public void OpenUber()
 		{
 			if (LyftIsInstalled)
-				UIApplication.SharedApplication.OpenUrl(new NSUrl($"uber://?action=setPickup&pickup=my_location&client_id={Settings.UBER_CLIENT_ID}"));
+				UIApplication.SharedApplication.OpenUrl(new NSUrl($"uber://?action=setPickup&pickup=my_location&client_id={UBER_CLIENT_ID}"));
 			else
-				UIApplication.SharedApplication.OpenUrl(new NSUrl($"https://m.uber.com/sign-up?client_id={Settings.UBER_CLIENT_ID}"));
+				UIApplication.SharedApplication.OpenUrl(new NSUrl($"https://m.uber.com/sign-up?client_id={UBER_CLIENT_ID}"));
 
 		}
 

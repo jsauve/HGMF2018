@@ -28,108 +28,17 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="App.xaml" />
-    <EmbeddedResource Include="Pages\Main.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\MoreSection\MoreAbout.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\MoreSection\MoreAboutThisApp.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\MoreSection\MoreContact.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\MoreSection\MoreTickets.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\MoreSection\MoreMaster.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\MoreSection\MoreNews.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\TwitterSection\TweetImageDetailPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\TwitterSection\Tweets.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\ScheduleSection\ScheduleDetail.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\ScheduleSection\ScheduleMaster.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\MoreSection\MorePrivacyPolicy.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Pages\MoreSection\MoreSettings.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Pages\Main.xaml.cs">
-      <DependentUpon>Main.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\ScheduleMasterViewModel.cs" />
-    <Compile Include="ViewModels\BaseNavigationViewModel.cs" />
-    <Compile Include="Abstractions\IDataSource.cs" />
-    <Compile Include="Data\FilesystemOnlyDayDataSource.cs" />
-    <Compile Include="Abstractions\ILocalBundleFileService.cs" />
-    <Compile Include="ViewModels\TweetsViewModel.cs" />
-    <Compile Include="ViewModels\ScheduleDetailViewModel.cs" />
     <Compile Include="Utility\ExtensionMethods.cs" />
-    <Compile Include="Models\TweetWrapper.cs" />
-    <Compile Include="Data\DayDataSource.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="Models\Performance.cs" />
-    <Compile Include="Models\Venue.cs" />
-    <Compile Include="Models\Day.cs" />
-    <Compile Include="Pages\MoreSection\MoreAboutHomegrown.xaml.cs">
-      <DependentUpon>MoreAbout.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\MoreSection\MoreAboutThisApp.xaml.cs">
-      <DependentUpon>MoreAboutThisApp.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\MoreSection\MoreContact.xaml.cs">
-      <DependentUpon>MoreContact.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\MoreSection\MoreTickets.xaml.cs">
-      <DependentUpon>MoreTickets.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\MoreSection\MoreMaster.xaml.cs">
-      <DependentUpon>MoreMaster.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\MoreSection\MoreNews.xaml.cs">
-      <DependentUpon>MoreNews.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\TwitterSection\TweetImageDetailPage.xaml.cs">
-      <DependentUpon>TweetImageDetailPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\TwitterSection\Tweets.xaml.cs">
-      <DependentUpon>Tweets.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ScheduleSection\ScheduleDetail.xaml.cs">
-      <DependentUpon>ScheduleDetail.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ScheduleSection\ScheduleMaster.xaml.cs">
-      <DependentUpon>ScheduleMaster.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Abstractions\ILoggerService.cs" />
     <Compile Include="Abstractions\ILyftService.cs" />
     <Compile Include="Abstractions\IVersionRetrievalService.cs" />
-    <Compile Include="Pages\MoreSection\MorePrivacyPolicy.xaml.cs">
-      <DependentUpon>MorePrivacyPolicy.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Abstractions\IUberService.cs" />
-    <Compile Include="Pages\MoreSection\MoreSettings.xaml.cs">
-      <DependentUpon>MoreSettings.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\CustomBackButtonPage.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -229,15 +138,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Pages\" />
     <Folder Include="Utility\" />
-    <Folder Include="Data\" />
-    <Folder Include="ViewModels\" />
     <Folder Include="Abstractions\" />
-    <Folder Include="Pages\ScheduleSection\" />
-    <Folder Include="Pages\TwitterSection\" />
-    <Folder Include="Pages\MoreSection\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
