@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="HGMF2018.MoreMaster" Title="More Stuff">
+	<ContentPage.Content>
+				<ListView ItemsSource="{Binding Names}" RowHeight="80" CachingStrategy="RecycleElement" HasUnevenRows="false" ItemTapped="ItemTapped" IsPullToRefreshEnabled="false">
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<ViewCell StyleId="disclosure" Height="60">
+								<StackLayout Orientation="Horizontal" Padding="20,10,10,10">
+									<Image Source="{Binding Icon}" HeightRequest="30" WidthRequest="30" HorizontalOptions="Center" VerticalOptions="Center" />
+									<Label Margin="20,0" Text="{Binding Name}" FontSize="Large" HeightRequest="80" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" />
+								</StackLayout>
+							</ViewCell>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+	</ContentPage.Content>
+</ContentPage>

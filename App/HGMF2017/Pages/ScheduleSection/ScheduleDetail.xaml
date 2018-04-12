@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="HGMF2018.ScheduleDetail" 
+	xmlns:cv="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions"
+	Title="{Binding SelectedDay.Date}">
+	<StackLayout>
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Button x:Name="ByVenueButton" Text="By Venue" BackgroundColor="LightGray" Grid.Row="0" Grid.Column="0" Margin="5,5,0,0" />
+			<Button x:Name="ChronologicalButton" Text="By Time" BackgroundColor="White" Grid.Row="0" Grid.Column="1" Margin="0,5,5,0" />
+		</Grid>
+		<ContentView x:Name="SortedByVenueContainer" IsVisible="true" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+			<cv:CarouselViewControl x:Name="SortedByVenueCarousel" Orientation="Horizontal" InterPageSpacing="10" ItemsSource="{Binding Days}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+			    <cv:CarouselViewControl.ItemTemplate>
+			        <DataTemplate>
+			            <ListView ItemsSource="{Binding PerformancesGroupedByVenue}" IsGroupingEnabled="true" HasUnevenRows="true" ItemTapped="ItemTapped">
+							<ListView.GroupHeaderTemplate>
+								<DataTemplate>
+									<ViewCell Height="60" IsEnabled="false">
+										<Label Text="{Binding Key}" VerticalOptions="End" FontSize="Large" Margin="10,10,0,15" />
+									</ViewCell>
+								</DataTemplate>
+							</ListView.GroupHeaderTemplate>
+							<ListView.ItemTemplate>
+								<DataTemplate>
+									<ViewCell IsEnabled="false">
+										<StackLayout Padding="20,10,10,10">
+											<Grid>
+												<Grid.RowDefinitions>
+													<RowDefinition Height="Auto" />
+													<RowDefinition Height="Auto" />
+												</Grid.RowDefinitions>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="110" />
+													<ColumnDefinition Width="*" />
+												</Grid.ColumnDefinitions>
+												<Label Text="{Binding Time, StringFormat='{0:h:mm tt}'}" FontAttributes="Bold" Margin="0,0,10,0" Grid.Row="0" Grid.Column="0" />
+												<Label Text="{Binding Name}" LineBreakMode="WordWrap" FontAttributes="Bold" Grid.Row="0" Grid.Column="1" />
+												<StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+													<ContentView Padding="5,2" BackgroundColor="#2FB74D" IsVisible="{Binding TwentyOnePlus}" IsEnabled="{Binding TwentyOnePlus}">
+														<Label Text="21+" FontSize="Micro" TextColor="White" />
+													</ContentView>
+													<ContentView Padding="5,2" BackgroundColor="#3851A4" IsVisible="{Binding WristbandRequired}" IsEnabled="{Binding WristbandRequired}">
+														<Label Text="Wristband required"  FontSize="Micro" TextColor="White" />
+													</ContentView>
+													<ContentView Padding="5,2" BackgroundColor="#F2963E" IsVisible="{Binding WeeklongWristbandRequired}" IsEnabled="{Binding WeeklongWristbandRequired}">
+														<Label Text="Week-long wristband required" FontSize="Micro" TextColor="White" />
+													</ContentView>
+												</StackLayout>
+											</Grid>
+										</StackLayout>
+									</ViewCell>
+								</DataTemplate>
+							</ListView.ItemTemplate>
+						</ListView>
+				    </DataTemplate>
+			    </cv:CarouselViewControl.ItemTemplate>
+			</cv:CarouselViewControl>
+		</ContentView>
+		<ContentView x:Name="SortedByTimeContainer" IsVisible="false" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+			<cv:CarouselViewControl x:Name="SortedByTimeCarousel" Orientation="Horizontal" InterPageSpacing="10"  ItemsSource="{Binding Days}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+			    <cv:CarouselViewControl.ItemTemplate>
+			        <DataTemplate>
+			           	<ListView ItemsSource="{Binding PerformancesGroupedByTime}" IsGroupingEnabled="true" HasUnevenRows="true" ItemTapped="ItemTapped">
+							<ListView.GroupHeaderTemplate>
+								<DataTemplate>
+									<ViewCell Height="60" IsEnabled="false">
+										<Label Text="{Binding Key, StringFormat='{0:h:mm tt}'}}" VerticalOptions="End" FontSize="Large" Margin="10,10,0,15" />
+									</ViewCell>
+								</DataTemplate>
+							</ListView.GroupHeaderTemplate>
+							<ListView.ItemTemplate>
+								<DataTemplate>
+									<ViewCell IsEnabled="false">
+										<StackLayout Padding="20,10,10,10">
+											<Label Text="{Binding Name}" FontSize="Medium" FontAttributes="Bold" Margin="0" />
+											<Label Text="{Binding VenueName}" TextColor="Gray" Margin="20,0,0,5" />
+											<StackLayout Orientation="Horizontal" Margin="20,0,0,0">
+												<ContentView Padding="5,2" BackgroundColor="#2FB74D" IsVisible="{Binding TwentyOnePlus}" IsEnabled="{Binding TwentyOnePlus}">
+													<Label Text="21+" FontSize="Micro" TextColor="White" />
+												</ContentView>
+												<ContentView Padding="5,2" BackgroundColor="#3851A4" IsVisible="{Binding WristbandRequired}" IsEnabled="{Binding WristbandRequired}">
+													<Label Text="Wristband required"  FontSize="Micro" TextColor="White" />
+												</ContentView>
+												<ContentView Padding="5,2" BackgroundColor="#F2963E" IsVisible="{Binding WeeklongWristbandRequired}" IsEnabled="{Binding WeeklongWristbandRequired}">
+													<Label Text="Week-long wristband required" FontSize="Micro" TextColor="White" />
+												</ContentView>
+											</StackLayout>
+										</StackLayout>
+									</ViewCell>
+								</DataTemplate>
+							</ListView.ItemTemplate>
+						</ListView>
+				    </DataTemplate>
+			    </cv:CarouselViewControl.ItemTemplate>
+			</cv:CarouselViewControl>
+		</ContentView>
+	</StackLayout>
+</ContentPage>

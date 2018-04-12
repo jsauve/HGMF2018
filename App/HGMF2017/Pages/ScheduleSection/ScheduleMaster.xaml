@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="HGMF2018.ScheduleMaster" 
+	Title = "HGMF2017 (unofficial)">
+	<ContentPage.Content>
+		<ListView x:Name="DaysListView" ItemsSource="{Binding Days}" CachingStrategy="RetainElement" RowHeight="60" HasUnevenRows="false" ItemTapped="ItemTapped" IsPullToRefreshEnabled="true" RefreshCommand="{Binding RefreshDaysCommand}" IsRefreshing="{Binding IsBusy, Mode=OneWay}">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<ViewCell StyleId="disclosure" Height="40">
+						<Label Margin="20,0" Text="{Binding Date, StringFormat='{0:ddd, MMM d}'}" Style="{StaticResource ScheduleMainLabel}" HeightRequest="80" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" LineBreakMode="TailTruncation" />
+					</ViewCell>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+	</ContentPage.Content>
+</ContentPage>

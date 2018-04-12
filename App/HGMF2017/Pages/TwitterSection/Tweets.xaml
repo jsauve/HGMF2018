@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="HGMF2018.Tweets" 
+	xmlns:local="clr-namespace:HGMF2017"
+	xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+	x:Name="TweetsPage"
+	Title="#HGMF17 / @DHGMF">
+	<ListView x:Name="TweetsListView" ItemsSource="{Binding Tweets}" HasUnevenRows="true" ItemTapped="ItemTapped" IsPullToRefreshEnabled="true" RefreshCommand="{Binding RefreshTweetsCommand}" IsRefreshing="{Binding IsBusy, Mode=OneWay}">
+		<ListView.ItemTemplate>
+			<DataTemplate>
+				<ViewCell>
+					<StackLayout Padding="20,10,10,20">
+						<StackLayout x:Name="tweetHeader" Orientation="Horizontal" VerticalOptions="Start">
+							<ff:CachedImage Source="{Binding Status.User.ProfileImageUrlHttps}" HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" Aspect="AspectFit" DownsampleToViewSize="true" DownsampleWidth="40" />
+							<StackLayout HorizontalOptions="FillAndExpand">
+								<Label Text="{Binding Status.User.Name}" FontAttributes="Bold" TextColor="Black" Style="{StaticResource TweetNameStyle}" />
+								<Label Text="{Binding Handle}" TextColor="Gray" Style="{StaticResource TweetHandleStyle}" />
+							</StackLayout>
+							<Image Source="TwitterLogo" HeightRequest="25" WidthRequest="25" HorizontalOptions="End" VerticalOptions="Start" />
+						</StackLayout>
+						<StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" Margin="0,10">
+							<Label x:Name="tweetText" Text="{Binding Status.Text}" Style="{StaticResource TweetTextStyle}" />
+							<ff:CachedImage Source="{Binding ImageUrl}" IsVisible="{Binding HasImage}" IsEnabled="{Binding HasImage}" HeightRequest="100" WidthRequest="100" DownsampleToViewSize="true" DownsampleWidth="100">
+								<ff:CachedImage.GestureRecognizers>
+									<TapGestureRecognizer 
+									NumberOfTapsRequired="1" 
+									Command="{Binding Path=BindingContext.ImageTapCommand, Source={x:Reference TweetsPage}}" 
+									CommandParameter="{Binding ImageUrl}" />
+								</ff:CachedImage.GestureRecognizers>
+							</ff:CachedImage>
+						</StackLayout>
+						<Label x:Name="tweetFooter" Text="{Binding Status.CreatedAt, StringFormat='{0:h:mm tt - d MMM yyyy}'}" TextColor="Gray" VerticalOptions="End" Style="{StaticResource TweetFooterStyle}" />
+					</StackLayout>
+				</ViewCell>
+			</DataTemplate>
+		</ListView.ItemTemplate>
+	</ListView>
+</ContentPage>
