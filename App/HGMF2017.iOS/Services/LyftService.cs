@@ -9,14 +9,12 @@ namespace HGMF2018.iOS
 {
 	public class LyftService : ILyftService
 	{
-        const string LYFT_CLIENT_ID = "";
-
 		public void OpenLyft()
 		{
 			if (LyftIsInstalled)
-				UIApplication.SharedApplication.OpenUrl(new NSUrl($"lyft://partner={LYFT_CLIENT_ID}"));
+                UIApplication.SharedApplication.OpenUrl(new NSUrl($"lyft://partner={Settings.LYFT_CLIENT_ID}"));
 			else
-				UIApplication.SharedApplication.OpenUrl(new NSUrl($"https://www.lyft.com/signup/SDKSIGNUP?clientId={LYFT_CLIENT_ID}&sdkName=iOS_direct"));
+                UIApplication.SharedApplication.OpenUrl(new NSUrl($"https://www.lyft.com/signup/SDKSIGNUP?clientId={Settings.LYFT_CLIENT_ID}&sdkName=iOS_direct"));
 				
 		}
 

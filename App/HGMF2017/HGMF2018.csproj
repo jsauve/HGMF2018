@@ -40,6 +40,7 @@
     <Compile Include="Abstractions\IVersionRetrievalService.cs" />
     <Compile Include="Abstractions\IUberService.cs" />
     <Compile Include="Pages\CustomBackButtonPage.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PCLStorage.Abstractions">

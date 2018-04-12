@@ -11,15 +11,12 @@ namespace HGMF2018.Droid
 	public class UberService : IUberService
 	{
 		static readonly string UBER_PACKAGE = "com.ubercab";
-
-        const string UBER_CLIENT_ID = "";
-
 		public void OpenUber()
 		{
 			if (IsPackageInstalled)
-				OpenLink($"uber://?action=setPickup&pickup=my_location&client_id={UBER_CLIENT_ID}");
+                OpenLink($"uber://?action=setPickup&pickup=my_location&client_id={Settings.UBER_CLIENT_ID}");
 			else
-				OpenLink($"https://m.uber.com/sign-up?client_id={UBER_CLIENT_ID}");
+                OpenLink($"https://m.uber.com/sign-up?client_id={Settings.UBER_CLIENT_ID}");
 		}
 
 		void OpenLink(string link)
