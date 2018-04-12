@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+	xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	x:Class="HGMF2018.TweetImageDetailPage" 
+	xmlns:cv="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions" 
+	xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+	BackgroundColor="Black">
+	<ContentPage.Content>
+		<cv:CarouselViewControl BackgroundColor="Black" x:Name="TweetImageCarousel" ItemsSource="{Binding TweetsWithImages}" InterPageSpacing="0" Position="{Binding SelectedPosition}" Orientation="Horizontal" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+			<cv:CarouselViewControl.ItemTemplate>
+				<DataTemplate>
+						<StackLayout BackgroundColor="Black" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Padding="10">
+							<ff:CachedImage HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" DownsampleToViewSize="true" Aspect="AspectFit" Source="{Binding ImageUrl}" />
+							<StackLayout>
+								<Label Text="{Binding Handle}" TextColor="White" />
+								<Label Text="{Binding Text}" TextColor="White" />
+							</StackLayout>
+						</StackLayout>
+				</DataTemplate>
+			</cv:CarouselViewControl.ItemTemplate>
+		</cv:CarouselViewControl>
+	</ContentPage.Content>
+</ContentPage>
