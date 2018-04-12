@@ -1,11 +1,15 @@
-﻿<Properties StartupConfiguration="{1DB15AD8-0B86-409B-9D94-365A958193B0}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="HGMF2017/Pages/Main.xaml.cs">
+﻿<Properties StartupConfiguration="{50CDA655-D25C-48CE-8CEF-3421331A4B42}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HGMF2017.iOS/Services/UberService.cs">
     <Files>
-      <File FileName="HGMF2017/Pages/Main.xaml.cs" Line="26" Column="40" />
-      <File FileName="HGMF2017.iOS/Renderers/CustomBackButtonPageRenderer.cs" Line="18" Column="13" />
+      <File FileName="HGMF2017.iOS/Renderers/CustomBackButtonPageRenderer.cs" Line="9" Column="95" />
+      <File FileName="HGMF2017/App.xaml.cs" Line="32" Column="50" />
+      <File FileName="HGMF2017.Droid/Services/UberService.cs" Line="7" Column="1" />
+      <File FileName="HGMF2017.Droid/Services/LyftService.cs" Line="15" Column="9" />
+      <File FileName="HGMF2017.iOS/Services/LyftService.cs" Line="6" Column="1" />
+      <File FileName="HGMF2017.iOS/Services/UberService.cs" Line="19" Column="103" />
     </Files>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

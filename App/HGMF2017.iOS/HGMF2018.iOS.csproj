@@ -244,31 +244,14 @@
     <Compile Include="Services\VersionRetrievalService.cs" />
     <Compile Include="Services\LoggerService.cs" />
     <Compile Include="Services\LyftService.cs" />
-    <Compile Include="Services\LocalBundleFileService.cs" />
     <Compile Include="Services\UberService.cs" />
     <Compile Include="Renderers\CustomBackButtonPageRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\Calendar.png" />
-    <BundleResource Include="Resources\Calendar%402x.png" />
-    <BundleResource Include="Resources\More.png" />
-    <BundleResource Include="Resources\More%402x.png" />
-    <BundleResource Include="Resources\Twitter.png" />
-    <BundleResource Include="Resources\Twitter%402x.png" />
-    <BundleResource Include="Resources\TwitterLogo.png" />
     <BundleResource Include="Resources\LyftToolbar%402x.png" />
     <BundleResource Include="Resources\LyftToolbar%403x.png" />
-    <BundleResource Include="Resources\PhotosToolbar%402x.png" />
-    <BundleResource Include="Resources\PhotosToolbar%403x.png" />
-    <BundleResource Include="Resources\About.png" />
-    <BundleResource Include="Resources\News.png" />
-    <BundleResource Include="Resources\PaperPlane.png" />
-    <BundleResource Include="Resources\Smartphones.png" />
-    <BundleResource Include="Resources\Tickets.png" />
-    <BundleResource Include="Resources\Privacy.png" />
     <BundleResource Include="Resources\UberToolbar%402x.png" />
     <BundleResource Include="Resources\UberToolbar%403x.png" />
-    <BundleResource Include="Resources\Settings.png" />
     <BundleResource Include="Resources\iosbackarrow%402x.png" />
     <BundleResource Include="Resources\HGMF-splash%403x.png" />
   </ItemGroup>

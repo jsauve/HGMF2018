@@ -43,6 +43,8 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>NSAllowsArbitraryLoads </key>
+        	<true/>
 			<key>duluthhomegrown.org</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
@@ -52,44 +54,10 @@
 				<key>NSIncludesSubdomains</key>
 				<true/>
 			</dict>
-			<key>duluthnewstribune.com</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-				<key>NSExceptionRequiresForwardSecrecy</key>
-				<false/>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-			</dict>
-			<key>duluthhomegrown2017.azurewebsites.net</key>
-			<dict>
-				<key>NSExceptionRequiresForwardSecrecy</key>
-				<false/>
-				<key>NSIncludesSubdomains</key>
-				<false/>
-			</dict>
-			<key>mobile.azure.com</key>
-			<dict>
-				<key>NSExceptionRequiresForwardSecrecy</key>
-				<false/>
-				<key>NSIncludesSubdomains</key>
-				<false/>
-			</dict>
-			<key>raw.githubusercontent.com</key>
-			<dict>
-				<key>NSExceptionRequiresForwardSecrecy</key>
-				<false/>
-				<key>NSIncludesSubdomains</key>
-				<false/>
-			</dict>
 		</dict>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>This app needs access to the camera to take photos.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs access to photos.</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>lyft</string>
