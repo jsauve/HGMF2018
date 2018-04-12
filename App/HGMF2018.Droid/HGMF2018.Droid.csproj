@@ -262,7 +262,7 @@
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HGMF2017\HGMF2018.csproj">
+    <ProjectReference Include="..\HGMF2018\HGMF2018.csproj">
       <Project>{5E2C6CB7-7697-44E3-A8F4-BC8965E449DF}</Project>
       <Name>HGMF2018</Name>
     </ProjectReference>
