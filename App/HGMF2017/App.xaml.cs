@@ -14,6 +14,8 @@ namespace HGMF2018
 
         const string _RootAddress = "https://www.duluthhomegrown.org/";
 
+        static string _CurrentUrl = "";
+
         static int _NavCount = 0;
         static bool _IsFirstNav = true;
         static bool _IsBackNav;
@@ -40,8 +42,16 @@ namespace HGMF2018
                 })
             };
 
+            webView.Navigating += (sender, e) => {
+                
+                if (!_IsBackNav && _CurrentUrl.Equals(e.Url, StringComparison.Ordinal))
+                    e.Cancel = true;
+            };
+
             webView.Navigated += (sender, e) => 
             {
+                _CurrentUrl = e.Url;
+
                 if (_IsFirstNav)
                 {
                     _IsFirstNav = false;
