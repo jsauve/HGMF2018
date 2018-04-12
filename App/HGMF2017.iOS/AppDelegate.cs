@@ -16,13 +16,13 @@ namespace HGMF2018.iOS
 	{
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-#if !DEBUG
-            MobileCenter.Start(Settings.MOBILECENTER_IOS_APP_ID, typeof(Analytics), typeof(Crashes));
-#endif
+//#if !DEBUG
+//            MobileCenter.Start(Settings.MOBILECENTER_IOS_APP_ID, typeof(Analytics), typeof(Crashes));
+//#endif
 
-#if ENABLE_TEST_CLOUD
-				Xamarin.Calabash.Start();
-#endif
+//#if ENABLE_TEST_CLOUD
+//				Xamarin.Calabash.Start();
+//#endif
 
 			Forms.Init();
 
@@ -37,9 +37,9 @@ namespace HGMF2018.iOS
 
 		public override bool WillFinishLaunching(UIApplication uiApplication, NSDictionary launchOptions)
 		{
-#if !DEBUG
-			Pyze.Initialize(Settings.PYZE_IOS_API_KEY);
-#endif
+//#if !DEBUG
+//			Pyze.Initialize(Settings.PYZE_IOS_API_KEY);
+//#endif
 			return base.WillFinishLaunching(uiApplication, launchOptions);
 		}
 

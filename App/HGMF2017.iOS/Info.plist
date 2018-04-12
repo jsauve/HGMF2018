@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIdentifier</key>
-	<string>org.duluthhomegrown.HGMF2018</string>
+	<string>org.duluthhomegrown.hgmf2018</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0.0</string>
 	<key>CFBundleVersion</key>
@@ -44,7 +44,7 @@
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>NSAllowsArbitraryLoads </key>
-        	<true/>
+			<true/>
 			<key>duluthhomegrown.org</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>

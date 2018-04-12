@@ -20,10 +20,10 @@ namespace HGMF2018.Droid
         protected override void OnCreate (Bundle bundle)
         {
 
-#if !DEBUG
-            MobileCenter.Start (Settings.MOBILECENTER_ANDROID_APP_ID, typeof (Analytics), typeof (Crashes));
-            Pyze.Initialize(this);
-#endif
+//#if !DEBUG
+//            MobileCenter.Start (Settings.MOBILECENTER_ANDROID_APP_ID, typeof (Analytics), typeof (Crashes));
+//            Pyze.Initialize(this);
+//#endif
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
