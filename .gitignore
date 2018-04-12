@@ -27,7 +27,7 @@ autom4te.cache/
 tarballs/
 test-results/
 Thumbs.db
-App/.vs/FFImageLoading/xs/UserPrefs.xml
+.vs/
 
 # Mac bundle stuff
 *.dmg
