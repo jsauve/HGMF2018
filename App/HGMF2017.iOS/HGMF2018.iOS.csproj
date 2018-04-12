@@ -202,9 +202,6 @@
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-new-114.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-new-57.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\icon-new-29.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\HGMF-icon-180.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\HGMF-icon-1024.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\HGMF-icon-120.png" />

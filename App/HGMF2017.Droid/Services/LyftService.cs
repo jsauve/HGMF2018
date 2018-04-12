@@ -11,15 +11,12 @@ namespace HGMF2018.Droid
 	public class LyftService : ILyftService
 	{
 		static readonly string LYFT_PACKAGE = "me.lyft.android";
-
-        const string LYFT_CLIENT_ID = "";
-
 		public void OpenLyft()
 		{
 			if (IsPackageInstalled)
 				OpenLink("lyft://");
 			else
-				OpenLink($"https://www.lyft.com/signup/SDKSIGNUP?clientId={LYFT_CLIENT_ID}&sdkName=android_direct");
+				OpenLink($"https://www.lyft.com/signup/SDKSIGNUP?clientId={Settings.LYFT_CLIENT_ID}&sdkName=android_direct");
 		}
 
 		void OpenLink(string link)
