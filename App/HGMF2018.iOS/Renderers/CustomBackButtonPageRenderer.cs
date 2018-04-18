@@ -12,34 +12,34 @@ namespace HGMF2018.iOS
     public class CustomBackButtonPageRenderer : PageRenderer
     {
 
-		public override void ViewDidLoad()
-		{
+        public override void ViewDidLoad()
+        {
             base.ViewDidLoad();
 
             UIApplication.SharedApplication.SetStatusBarHidden(false, UIStatusBarAnimation.Fade);
-		}
+        }
 
-		protected override void OnElementChanged(VisualElementChangedEventArgs e)
-		{
+        protected override void OnElementChanged(VisualElementChangedEventArgs e)
+        {
             base.OnElementChanged(e);
 
-            ((CustomBackButtonPage)Element).PropertyChanged += (sender, evt) => 
+            ((CustomBackButtonPage)Element).PropertyChanged += (sender, evt) =>
             {
                 if (evt.PropertyName == CustomBackButtonPage.EnableBackButtonOverrideProperty.PropertyName)
                 {
                     SetupCustomBackButton(sender as CustomBackButtonPage);
                 }
             };
-		}
+        }
 
-		public override void ViewWillAppear(bool animated)
-		{
+        public override void ViewWillAppear(bool animated)
+        {
             base.ViewWillAppear(animated);
 
             UIApplication.SharedApplication.SetStatusBarHidden(false, UIStatusBarAnimation.Fade);
 
             SetupCustomBackButton(Element as CustomBackButtonPage);
-		}
+        }
 
         void SetupCustomBackButton(VisualElement element)
         {
@@ -95,7 +95,7 @@ namespace HGMF2018.iOS
             backBtn.Frame = new CGRect(0, 0, UIScreen.MainScreen.Bounds.Width / 4, NavigationController.NavigationBar.Frame.Height);
 
             // Add our button to a container
-            var btnContainer = new UIView(new CGRect(0, 0, backBtn.Frame.Width, backBtn.Frame.Height)); 
+            var btnContainer = new UIView(new CGRect(0, 0, backBtn.Frame.Width, backBtn.Frame.Height));
             btnContainer.AddSubview(backBtn);
 
             // A dummy button item to push our custom  back button to

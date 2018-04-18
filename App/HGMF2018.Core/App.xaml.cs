@@ -39,7 +39,8 @@ namespace HGMF2018.Core
                 })
             };
 
-            webView.Navigating += (sender, e) => {
+            webView.Navigating += (sender, e) =>
+            {
 
                 if (!_IsBackNav && _CurrentUrl.Equals(e.Url, StringComparison.Ordinal))
                     e.Cancel = true;

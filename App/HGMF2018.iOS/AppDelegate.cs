@@ -12,43 +12,43 @@ using HGMF2018.Core;
 
 namespace HGMF2018.iOS
 {
-	[Register("AppDelegate")]
-	public partial class AppDelegate : FormsApplicationDelegate
-	{
-		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+    [Register("AppDelegate")]
+    public partial class AppDelegate : FormsApplicationDelegate
+    {
+        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-//#if !DEBUG
-//            MobileCenter.Start(Settings.MOBILECENTER_IOS_APP_ID, typeof(Analytics), typeof(Crashes));
-//#endif
+            //#if !DEBUG
+            //            MobileCenter.Start(Settings.MOBILECENTER_IOS_APP_ID, typeof(Analytics), typeof(Crashes));
+            //#endif
 
-//#if ENABLE_TEST_CLOUD
-//				Xamarin.Calabash.Start();
-//#endif
+            //#if ENABLE_TEST_CLOUD
+            //				Xamarin.Calabash.Start();
+            //#endif
 
-			Forms.Init();
+            Forms.Init();
 
-			CarouselViewRenderer.Init();
+            CarouselViewRenderer.Init();
 
-			CachedImageRenderer.Init();
+            CachedImageRenderer.Init();
 
-			LoadApplication(new App());
+            LoadApplication(new App());
 
-			return base.FinishedLaunching(app, options);
-		}
+            return base.FinishedLaunching(app, options);
+        }
 
-		public override bool WillFinishLaunching(UIApplication uiApplication, NSDictionary launchOptions)
-		{
-//#if !DEBUG
-//			Pyze.Initialize(Settings.PYZE_IOS_API_KEY);
-//#endif
-			return base.WillFinishLaunching(uiApplication, launchOptions);
-		}
+        public override bool WillFinishLaunching(UIApplication uiApplication, NSDictionary launchOptions)
+        {
+            //#if !DEBUG
+            //			Pyze.Initialize(Settings.PYZE_IOS_API_KEY);
+            //#endif
+            return base.WillFinishLaunching(uiApplication, launchOptions);
+        }
 
-		public override void OnActivated(UIApplication uiApplication)
-		{
-			base.OnActivated(uiApplication);
+        public override void OnActivated(UIApplication uiApplication)
+        {
+            base.OnActivated(uiApplication);
 
             //TODO: Put version-checking code here
-		}
-	}
+        }
+    }
 }
