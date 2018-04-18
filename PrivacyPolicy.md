@@ -32,7 +32,7 @@ We do not use the Application to knowingly solicit data from or market to childr
 
 ## Changes
 
-This Privacy Policy may be updated from time to time for any reason. We will notify you of any changes to our Privacy Policy by posting the new Privacy Policy at http://bit.ly/2oZT7PH. You are advised to consult this Privacy Policy regularly for any changes, as continued use is deemed approval of all changes.
+This Privacy Policy may be updated from time to time for any reason. We will notify you of any changes to our Privacy Policy by posting the new Privacy Policy at https://github.com/jsauve/HGMF2018/edit/master/PrivacyPolicy.md. You are advised to consult this Privacy Policy regularly for any changes, as continued use is deemed approval of all changes.
 
 ## Your Consent
 
