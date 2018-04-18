@@ -8,4 +8,4 @@ The official app of the 2018 Duluth Homegrown Music Festival
 * Build and run
 
 ### Note
-You may see shit it the code leftover from last year's app. I've gutted most of it, but there may be some remnants.
+You may see shit in the code leftover from last year's app. I've gutted most of it, but there may be some remnants.
