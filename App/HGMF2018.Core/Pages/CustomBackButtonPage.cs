@@ -28,6 +28,6 @@ namespace HGMF2018.Core
                 OnPropertyChanged(nameof(EnableBackButtonOverride));
             }
         }
-	}
+    }
 }
 
