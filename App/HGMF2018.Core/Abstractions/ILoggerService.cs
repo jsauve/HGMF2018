@@ -5,6 +5,6 @@ namespace HGMF2018.Core
 {
     public interface ILoggerService
     {
-        void LogException (Exception ex);
+        void LogException(Exception ex);
     }
 }
