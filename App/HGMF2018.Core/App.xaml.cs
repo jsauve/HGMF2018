@@ -1,16 +1,16 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
-namespace HGMF2018
+namespace HGMF2018.Core
 {
-	public partial class App : Application
-	{
-		public static readonly string iOSAppStoreUrl = "https://itunes.apple.com/us/app/hgmf2017-unofficial/id1229131015?mt=8";
-		public static readonly string AndroidAppStoreUrl = "https://play.google.com/store/apps/details?id=com.joesauve.duluthhomegrown2017";
+    public partial class App : Application
+    {
+        public static readonly string iOSAppStoreUrl = "https://itunes.apple.com/us/app/hgmf2017-unofficial/id1229131015?mt=8";
+        public static readonly string AndroidAppStoreUrl = "https://play.google.com/store/apps/details?id=com.joesauve.duluthhomegrown2017";
 
         const string _RootAddress = "https://www.duluthhomegrown.org/";
 
@@ -20,9 +20,9 @@ namespace HGMF2018
         static bool _IsFirstNav = true;
         static bool _IsBackNav;
 
-		public App()
-		{
-			InitializeComponent();
+        public App()
+        {
+            InitializeComponent();
 
             var webView = new WebView()
             {
@@ -35,7 +35,7 @@ namespace HGMF2018
             {
                 Title = "#HGMF2018",
                 Content = webView,
-                CustomBackButtonAction = new Action(() => 
+                CustomBackButtonAction = new Action(() =>
                 {
                     _IsBackNav = true;
                     webView.GoBack();
@@ -43,12 +43,12 @@ namespace HGMF2018
             };
 
             webView.Navigating += (sender, e) => {
-                
+
                 if (!_IsBackNav && _CurrentUrl.Equals(e.Url, StringComparison.Ordinal))
                     e.Cancel = true;
             };
 
-            webView.Navigated += (sender, e) => 
+            webView.Navigated += (sender, e) =>
             {
                 _CurrentUrl = e.Url;
 
@@ -76,10 +76,10 @@ namespace HGMF2018
 
             var navigationPage = new NavigationPage(page) { BarBackgroundColor = Color.Black, BarTextColor = Color.White };
 
-            navigationPage.ToolbarItems.Add(new ToolbarItem("Lyft", "LyftToolbar", () => DependencyService.Get<ILyftService>().OpenLyft()));
-            navigationPage.ToolbarItems.Add(new ToolbarItem("Uber", "UberToolbar", () => DependencyService.Get<IUberService>().OpenUber()));
+            navigationPage.ToolbarItems.Add(new ToolbarItem("Lyft", "LyftToolbar", () => DependencyService.Get<ILyftService>().Open()));
+            navigationPage.ToolbarItems.Add(new ToolbarItem("Uber", "UberToolbar", () => DependencyService.Get<IUberService>().Open()));
 
             MainPage = navigationPage;
-		}
-	}
+        }
+    }
 }

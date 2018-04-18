@@ -5,11 +5,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Microsoft.Azure.Mobile;
-using Microsoft.Azure.Mobile.Analytics;
 using Xamarin.Forms;
 
-namespace HGMF2018
+namespace HGMF2018.Core
 {
     public static class ExceptionExtensions
     {

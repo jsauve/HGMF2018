@@ -1,33 +1,45 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using Android.Content;
 using Android.Content.PM;
+using HGMF2018.Core;
+using HGMF2018.Core.Abstractions;
 using HGMF2018.Droid;
 using Plugin.CurrentActivity;
 using Xamarin.Forms;
+using strings = HGMF2018.Core.Constants;
 
 [assembly: Dependency(typeof(UberService))]
 namespace HGMF2018.Droid
 {
 	public class UberService : IUberService
 	{
-		static readonly string UBER_PACKAGE = "com.ubercab";
-		public void OpenUber()
+		const string UBER_PACKAGE = "com.ubercab";
+
+		public async Task Open()
 		{
-			if (IsPackageInstalled)
+            if (UberAppIsInstalled)
                 OpenLink($"uber://?action=setPickup&pickup=my_location&client_id={Settings.UBER_CLIENT_ID}");
-			else
-                OpenLink($"https://m.uber.com/sign-up?client_id={Settings.UBER_CLIENT_ID}");
+            else
+            {
+                var uds = DependencyService.Get<IUserDialogService>();
+
+                await uds.ShowConfirmOrCancelDialog(
+                    strings.INSTALL_UBER_TITLE, 
+                    strings.INSTALL_UBER_MESSAGE, 
+                    strings.OK, strings.CANCEL, 
+                    () => OpenLink($"https://m.uber.com/sign-up?client_id={Settings.UBER_CLIENT_ID}"));
+            }
 		}
 
 		void OpenLink(string link)
 		{
-			Intent playStoreIntent = new Intent(Intent.ActionView);
-			playStoreIntent.AddFlags(ActivityFlags.NewTask);
-			playStoreIntent.SetData(Android.Net.Uri.Parse(link));
-			CrossCurrentActivity.Current.Activity.StartActivity(playStoreIntent);
+            Intent urlIntent = new Intent(Intent.ActionView);
+			urlIntent.AddFlags(ActivityFlags.NewTask);
+			urlIntent.SetData(Android.Net.Uri.Parse(link));
+			CrossCurrentActivity.Current.Activity.StartActivity(urlIntent);
 		}
 
-		bool IsPackageInstalled
+		bool UberAppIsInstalled
 		{
 			get
 			{

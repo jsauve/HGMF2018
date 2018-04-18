@@ -1,4 +1,5 @@
 using System;
+using HGMF2018.Core;
 using HGMF2018.Droid;
 using Xamarin.Forms;
 
