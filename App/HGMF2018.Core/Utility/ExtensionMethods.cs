@@ -13,9 +13,9 @@ namespace HGMF2018.Core
     {
         public static void ReportError (this Exception ex)
         {
-#if !DEBUG
-            DependencyService.Get<ILoggerService> ().LogException (ex);
-#endif
+//#if !DEBUG
+//            DependencyService.Get<ILoggerService> ().LogException (ex);
+//#endif
 		}
 }
 
