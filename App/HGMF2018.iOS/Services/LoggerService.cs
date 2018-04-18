@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
+using HGMF2018.Core;
 using HGMF2018.iOS;
 using Microsoft.Azure.Mobile.Analytics;
 using Xamarin.Forms;

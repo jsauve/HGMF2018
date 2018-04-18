@@ -3,14 +3,12 @@ using Android.Content.PM;
 using Android.OS;
 using CarouselView.FormsPlugin.Android;
 using Xamarin.Forms.Platform.Android;
-using pyze.xamarin.android;
 using Xamarin.Forms;
-using Microsoft.Azure.Mobile;
-using Microsoft.Azure.Mobile.Analytics;
-using Microsoft.Azure.Mobile.Crashes;
 using FFImageLoading.Forms.Droid;
 using Android.Views;
 using System.Linq;
+using HGMF2018.Core;
+using Acr.UserDialogs;
 
 namespace HGMF2018.Droid
 {
@@ -20,15 +18,12 @@ namespace HGMF2018.Droid
         protected override void OnCreate (Bundle bundle)
         {
 
-//#if !DEBUG
-//            MobileCenter.Start (Settings.MOBILECENTER_ANDROID_APP_ID, typeof (Analytics), typeof (Crashes));
-//            Pyze.Initialize(this);
-//#endif
-
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate (bundle);
+
+            UserDialogs.Init(this);
 
             Forms.Init (this, bundle);
 

@@ -8,6 +8,7 @@ using Microsoft.Azure.Mobile;
 using Microsoft.Azure.Mobile.Analytics;
 using Microsoft.Azure.Mobile.Crashes;
 using FFImageLoading.Forms.Touch;
+using HGMF2018.Core;
 
 namespace HGMF2018.iOS
 {

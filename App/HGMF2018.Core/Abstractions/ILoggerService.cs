@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HGMF2018
+namespace HGMF2018.Core
 {
     public interface ILoggerService
     {

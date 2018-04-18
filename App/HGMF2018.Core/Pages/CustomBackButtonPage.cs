@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 
-namespace HGMF2018
+namespace HGMF2018.Core
 {
     public class CustomBackButtonPage : ContentPage
     {

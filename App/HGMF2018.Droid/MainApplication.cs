@@ -1,5 +1,5 @@
 using System;
-
+using Acr.UserDialogs;
 using Android.App;
 using Android.OS;
 using Android.Runtime;
@@ -20,7 +20,7 @@ namespace HGMF2018.Droid
         {
             base.OnCreate();
             RegisterActivityLifecycleCallbacks(this);
-            //A great place to initialize Xamarin.Insights and Dependency Services!
+            //A great place to initialize Xamarin.Insights and Dependency Services
         }
 
         public override void OnTerminate()

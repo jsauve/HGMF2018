@@ -1,6 +1,6 @@
 ﻿using System;
 using CoreGraphics;
-using HGMF2018;
+using HGMF2018.Core;
 using HGMF2018.iOS;
 using UIKit;
 using Xamarin.Forms;

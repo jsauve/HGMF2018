@@ -1,6 +1,7 @@
 using System;
 using HGMF2018.iOS;
 using Foundation;
+using HGMF2018.Core;
 
 [assembly: Xamarin.Forms.Dependency(typeof(VersionRetrievalService))]
 namespace HGMF2018.iOS

@@ -1,5 +1,6 @@
 ﻿using System;
-namespace HGMF2018
+
+namespace HGMF2018.Core
 {
     public class Settings
     {
