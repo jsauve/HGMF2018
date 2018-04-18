@@ -12,37 +12,37 @@ using Acr.UserDialogs;
 
 namespace HGMF2018.Droid
 {
-    [Activity (Label = "HGMF2018", Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "HGMF2018", Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
-        protected override void OnCreate (Bundle bundle)
+        protected override void OnCreate(Bundle bundle)
         {
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
-            base.OnCreate (bundle);
+            base.OnCreate(bundle);
 
             UserDialogs.Init(this);
 
-            Forms.Init (this, bundle);
+            Forms.Init(this, bundle);
 
             CachedImageRenderer.Init(true);
 
-            CarouselViewRenderer.Init ();
+            CarouselViewRenderer.Init();
 
-            LoadApplication (new App ());
+            LoadApplication(new App());
         }
 
         protected override void OnResume()
         {
             base.OnResume();
 
-			//TODO: Put version-checking code here
-		}
+            //TODO: Put version-checking code here
+        }
 
-		public override bool OnMenuOpened(int featureId, IMenu menu)
-		{
+        public override bool OnMenuOpened(int featureId, IMenu menu)
+        {
             // check if the current item id 
             // is equals to the back button id
             if (featureId == 16908332)
@@ -71,7 +71,7 @@ namespace HGMF2018.Droid
             // since its not the back button 
             // click, pass the event to the base
             return base.OnMenuOpened(featureId, menu);
-		}
+        }
 
         public override void OnBackPressed()
         {
@@ -97,5 +97,5 @@ namespace HGMF2018.Droid
                 base.OnBackPressed();
             }
         }
-	}
+    }
 }
