@@ -115,6 +115,9 @@ namespace HGMF2018.Core
 
             _NavPage = new NavigationPage(_BackButtonPage) { BarBackgroundColor = Color.Black, BarTextColor = Color.White };
 
+            // iOS needs the ToolbarItems added before display
+            SetupToolbarItemsForiOS();
+
             MainPage = _NavPage;
         }
 
@@ -122,7 +125,7 @@ namespace HGMF2018.Core
         {
             base.OnStart();
 
-            SetupRideShareButtons();
+            SetupToolbarItemsForAndroid();
 
             await CheckForNewVersionAsync();
         }
@@ -131,7 +134,7 @@ namespace HGMF2018.Core
         {
             base.OnResume();
 
-            SetupRideShareButtons();
+            SetupToolbarItemsForAndroid();
 
             await CheckForNewVersionAsync();
         }
@@ -167,25 +170,29 @@ namespace HGMF2018.Core
             }
         }
 
-        void SetupRideShareButtons()
+        void SetupToolbarItemsForiOS()
         {
+            if (Device.RuntimePlatform != Device.iOS)
+                return;
+
+            _NavPage.ToolbarItems.Clear();
+            _NavPage.ToolbarItems.Add(new ToolbarItem("Lyft", "LyftToolbar", () => _LyftService.Open()));
+            _NavPage.ToolbarItems.Add(new ToolbarItem("Uber", "UberToolbar", () => _UberService.Open()));
+        }
+
+        void SetupToolbarItemsForAndroid()
+        {
+            if (Device.RuntimePlatform != Device.Android)
+                return;
+
             _NavPage.ToolbarItems.Clear();
 
-            switch (Device.RuntimePlatform)
-            {
-                case Device.Android:
-                    if (_LyftService.IsInstalled)
-                        // don't show Lyft button on Android unless the app is already installed
-                        _NavPage.ToolbarItems.Add(new ToolbarItem("Lyft", "LyftToolbar", () => _LyftService.Open()));
-                    if (_UberService.IsInstalled)
-                        // don't show Uber button on Android unless the app is already installed
-                        _NavPage.ToolbarItems.Add(new ToolbarItem("Uber", "UberToolbar", () => _UberService.Open()));
-                    break;
-                case Device.iOS:
-                    _NavPage.ToolbarItems.Add(new ToolbarItem("Lyft", "LyftToolbar", () => _LyftService.Open()));
-                    _NavPage.ToolbarItems.Add(new ToolbarItem("Uber", "UberToolbar", () => _UberService.Open()));
-                    break;
-            }
+            if (_LyftService.IsInstalled)
+                // don't show Lyft button on Android unless the app is already installed
+                _NavPage.ToolbarItems.Add(new ToolbarItem("Lyft", "LyftToolbar", () => _LyftService.Open()));
+            if (_UberService.IsInstalled)
+                // don't show Uber button on Android unless the app is already installed
+                _NavPage.ToolbarItems.Add(new ToolbarItem("Uber", "UberToolbar", () => _UberService.Open()));
         }
 
         async Task<bool> NewerVersionIsAvailable()
