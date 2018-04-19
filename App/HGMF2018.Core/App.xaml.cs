@@ -60,7 +60,7 @@ namespace HGMF2018.Core
             {
                 Source = _RootAddress,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand, 
             };
 
             _BackButtonPage = new BackButtonPage()
@@ -76,11 +76,22 @@ namespace HGMF2018.Core
 
             _WebView.Navigating += async (object sender, WebNavigatingEventArgs e) =>
             {
-                if (_BannedDomains.ToList().Contains(e.Url))
+                if (Device.RuntimePlatform == Device.Android)
                 {
-                    e.Cancel = true;
-                    await _UserDialogService.ShowAlert("Not allowed!", $"Sorry, but to comply with Google Play regulations, we've blocked access to {new Uri(e.Url).Host} in this app.", strings.OK);
-                    return;
+                    var host = new Uri(e.Url)?.Host;
+
+                    if (!String.IsNullOrWhiteSpace(host))
+                    {
+                        foreach (var banned in _BannedDomains)
+                        {
+                            if (host.Contains(banned))
+                            {
+                                e.Cancel = true;
+                                await _UserDialogService.ShowAlert($"{banned} not allowed", $"Sorry, but to comply with Google Play regulations, we've blocked access to {banned} on this page.", strings.OK);
+                                return;
+                            }
+                        }
+                    }
                 }
 
                 if (!_IsBackNav && _CurrentUrl.Equals(e.Url, StringComparison.Ordinal))
