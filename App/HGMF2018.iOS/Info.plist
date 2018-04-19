@@ -41,9 +41,11 @@
 	<string>HGMF2018</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>NSAllowsArbitraryLoads </key>
+			<key>NSAllowsArbitraryLoads</key>
 			<true/>
 			<key>duluthhomegrown.org</key>
 			<dict>
