@@ -48,7 +48,7 @@ namespace HGMF2018.Droid
             if (featureId == 16908332)
             {
                 // retrieve the current xamarin forms page instance
-                var currentpage = (CustomBackButtonPage)
+                var currentpage = (BackButtonPage)
                 Xamarin.Forms.Application.
                 Current.MainPage.Navigation.
                 NavigationStack.LastOrDefault();
@@ -81,7 +81,7 @@ namespace HGMF2018.Droid
             // to cover the both events
 
             // retrieve the current xamarin forms page instance
-            var currentpage = (CustomBackButtonPage)
+            var currentpage = (BackButtonPage)
             Xamarin.Forms.Application.
             Current.MainPage.Navigation.
             NavigationStack.LastOrDefault();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using HGMF2018.Core.Abstractions;
 using Acr.UserDialogs;
 using Xamarin.Forms;
 using HGMF2018.Core.Services;
@@ -18,6 +17,13 @@ namespace HGMF2018.Core.Services
 
             if (result)
                 confirmAction.Invoke();
+        }
+
+        public async Task ShowAlert(string title, string message, string buttonText)
+        {
+            var config = new AlertConfig() { Title = title, Message = message, OkText = buttonText };
+
+            await UserDialogs.Instance.AlertAsync(config);
         }
     }
 }

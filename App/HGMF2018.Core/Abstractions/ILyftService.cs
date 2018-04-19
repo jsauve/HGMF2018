@@ -6,5 +6,6 @@ namespace HGMF2018.Core
     public interface ILyftService
     {
         Task Open();
+        bool IsInstalled { get; }
     }
 }

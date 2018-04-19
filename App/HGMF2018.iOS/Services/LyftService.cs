@@ -4,27 +4,30 @@ using Foundation;
 using UIKit;
 using Xamarin.Forms;
 using HGMF2018.Core;
-using HGMF2018.Core.Abstractions;
 using strings = HGMF2018.Core.Constants;
 using System.Threading.Tasks;
 
 [assembly: Dependency(typeof(LyftService))]
 namespace HGMF2018.iOS
 {
-	public class LyftService : ILyftService
-	{
-		public async Task Open()
-		{
-            if (LyftIsInstalled)
+    public class LyftService : ILyftService
+    {
+        public async Task Open()
+        {
+            if (IsInstalled)
                 UIApplication.SharedApplication.OpenUrl(new NSUrl($"lyft://partner={Settings.LYFT_CLIENT_ID}"));
             else
             {
-                var uds = DependencyService.Get<IUserDialogService>();
-                await uds.ShowConfirmOrCancelDialog(strings.INSTALL_LYFT_TITLE, strings.INSTALL_LYFT_MESSAGE, strings.OK, strings.CANCEL, () => UIApplication.SharedApplication.OpenUrl(new NSUrl($"https://www.lyft.com/signup/SDKSIGNUP?clientId={Settings.LYFT_CLIENT_ID}&sdkName=iOS_direct")));
+                await DependencyService.Get<IUserDialogService>().ShowConfirmOrCancelDialog(
+                    strings.INSTALL_LYFT_TITLE, 
+                    strings.INSTALL_LYFT_MESSAGE, 
+                    strings.OK, 
+                    strings.CANCEL, 
+                    () => UIApplication.SharedApplication.OpenUrl(new NSUrl("https://itunes.apple.com/us/app/lyft/id529379082")));
             }
-				
-		}
 
-		bool LyftIsInstalled => UIApplication.SharedApplication.CanOpenUrl(new NSUrl("lyft://"));
-	}
+        }
+
+        public bool IsInstalled => UIApplication.SharedApplication.CanOpenUrl(new NSUrl("lyft://"));
+    }
 }

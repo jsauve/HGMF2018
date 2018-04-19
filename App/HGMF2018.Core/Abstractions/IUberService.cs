@@ -6,5 +6,6 @@ namespace HGMF2018.Core
     public interface IUberService
     {
         Task Open();
+        bool IsInstalled { get; }
     }
 }
