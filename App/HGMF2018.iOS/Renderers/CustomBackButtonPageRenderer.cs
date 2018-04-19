@@ -6,7 +6,7 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(CustomBackButtonPage), typeof(CustomBackButtonPageRenderer))]
+[assembly: ExportRenderer(typeof(BackButtonPage), typeof(CustomBackButtonPageRenderer))]
 namespace HGMF2018.iOS
 {
     public class CustomBackButtonPageRenderer : PageRenderer
@@ -23,11 +23,11 @@ namespace HGMF2018.iOS
         {
             base.OnElementChanged(e);
 
-            ((CustomBackButtonPage)Element).PropertyChanged += (sender, evt) =>
+            ((BackButtonPage)Element).PropertyChanged += (sender, evt) =>
             {
-                if (evt.PropertyName == CustomBackButtonPage.EnableBackButtonOverrideProperty.PropertyName)
+                if (evt.PropertyName == BackButtonPage.EnableBackButtonOverrideProperty.PropertyName)
                 {
-                    SetupCustomBackButton(sender as CustomBackButtonPage);
+                    SetupCustomBackButton(sender as BackButtonPage);
                 }
             };
         }
@@ -38,12 +38,12 @@ namespace HGMF2018.iOS
 
             UIApplication.SharedApplication.SetStatusBarHidden(false, UIStatusBarAnimation.Fade);
 
-            SetupCustomBackButton(Element as CustomBackButtonPage);
+            SetupCustomBackButton(Element as BackButtonPage);
         }
 
         void SetupCustomBackButton(VisualElement element)
         {
-            if ((element as CustomBackButtonPage).EnableBackButtonOverride)
+            if ((element as BackButtonPage).EnableBackButtonOverride)
             {
                 CreateCustomBackButton();
                 return;
@@ -87,8 +87,8 @@ namespace HGMF2018.iOS
             backBtn.TouchDown += (sender, e) =>
             {
                 // Whatever your custom back button click handling
-                if ((Element as CustomBackButtonPage)?.CustomBackButtonAction != null)
-                    (Element as CustomBackButtonPage)?.CustomBackButtonAction.Invoke();
+                if ((Element as BackButtonPage)?.CustomBackButtonAction != null)
+                    (Element as BackButtonPage)?.CustomBackButtonAction.Invoke();
             };
 
             //Set the frame of the button
