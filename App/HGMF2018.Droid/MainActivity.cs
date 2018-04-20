@@ -9,6 +9,10 @@ using Android.Views;
 using System.Linq;
 using HGMF2018.Core;
 using Acr.UserDialogs;
+using Android.Gms.Common;
+using Firebase.Messaging;
+using Firebase.Iid;
+using Android.Util;
 
 namespace HGMF2018.Droid
 {
@@ -95,6 +99,30 @@ namespace HGMF2018.Droid
             else
             {
                 base.OnBackPressed();
+            }
+        }
+
+        // Just temporary. Don't leave this is in final implementation.
+        string notificationTextPlaceholderVar = string.Empty;
+
+        public bool IsPlayServicesAvailable ()
+        {
+            int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable (this);
+            if (resultCode != ConnectionResult.Success)
+            {
+                if (GoogleApiAvailability.Instance.IsUserResolvableError (resultCode))
+                    notificationTextPlaceholderVar = GoogleApiAvailability.Instance.GetErrorString (resultCode);
+                else
+                {
+                    notificationTextPlaceholderVar = "This device is not supported";
+                    Finish ();
+                }
+                return false;
+            }
+            else
+            {
+                notificationTextPlaceholderVar = "Google Play Services is available.";
+                return true;
             }
         }
     }
