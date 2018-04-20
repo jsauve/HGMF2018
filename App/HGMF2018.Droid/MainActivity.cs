@@ -9,6 +9,9 @@ using Android.Views;
 using System.Linq;
 using HGMF2018.Core;
 using Acr.UserDialogs;
+using Android.Gms.Common;
+using Android.Util;
+using Android.Content;
 
 namespace HGMF2018.Droid
 {
@@ -31,7 +34,36 @@ namespace HGMF2018.Droid
 
             CarouselViewRenderer.Init();
 
+            if (IsPlayServicesAvailable())
+            {
+                var intent = new Intent(this, typeof(RegistrationIntentService));
+                StartService(intent);
+            }
+
             LoadApplication(new App());
+        }
+
+        string pushNotificationTextPlaceholder = string.Empty;
+
+        public bool IsPlayServicesAvailable()
+        {
+            int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
+            if (resultCode != ConnectionResult.Success)
+            {
+                if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))
+                    pushNotificationTextPlaceholder = GoogleApiAvailability.Instance.GetErrorString(resultCode);
+                else
+                {
+                    pushNotificationTextPlaceholder = "Sorry, this device is not supported";
+                    Finish();
+                }
+                return false;
+            }
+            else
+            {
+                pushNotificationTextPlaceholder = "Google Play Services is available.";
+                return true;
+            }
         }
 
         protected override void OnResume()
