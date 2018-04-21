@@ -37,7 +37,7 @@
     <WarningLevel>4</WarningLevel>
     <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchFloat32>true</MtouchFloat32>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignEntitlements>Entitlements.prod.plist</CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
@@ -72,7 +72,7 @@
     <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
     <MtouchFastDev>true</MtouchFastDev>
     <MtouchFloat32>true</MtouchFloat32>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignEntitlements>Entitlements.dev.plist</CodesignEntitlements>
     <IOSDebuggerPort>14638</IOSDebuggerPort>
     <MtouchLink>None</MtouchLink>
     <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
@@ -239,8 +239,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
-    <None Include="Entitlements.plist" />
+    <None Include="Entitlements.dev.plist" />
     <None Include="packages.config" />
+    <None Include="Entitlements.prod.plist" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -251,6 +252,8 @@
     <Compile Include="Services\LyftService.cs" />
     <Compile Include="Services\UberService.cs" />
     <Compile Include="Renderers\CustomBackButtonPageRenderer.cs" />
+    <Compile Include="NotificationService.cs" />
+    <Compile Include="UserNotificationCenterDelegate.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\LyftToolbar%402x.png" />

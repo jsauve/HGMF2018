@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <application android:label="HGMF2018">
         <meta-data android:name="PyzeAppKey" android:value="HOCKEYAPP_ANDROID_APP_ID" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/icon" />
         <receiver android:name="com.google.firebase.iid.FirebaseInstanceIdInternalReceiver" android:exported="false" />
         <receiver android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver" android:exported="true" android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
