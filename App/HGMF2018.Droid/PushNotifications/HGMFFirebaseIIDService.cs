@@ -4,6 +4,7 @@ using Android.Util;
 using WindowsAzure.Messaging;
 using HGMF2018.Core;
 using System.Collections.Generic;
+using System;
 
 namespace HGMF2018.Droid
 {
@@ -22,7 +23,18 @@ namespace HGMF2018.Droid
         }
         void SendRegistrationToServer(string token)
         {
-            _Hub = new NotificationHub(Settings.AZURE_NOTIFICATIONHUB_NAME, Settings.AZURE_NOTIFICATIONHUB_CONNECTIONSTRING, this);
+            var hubName = String.Empty;
+            var hubConnectionString = String.Empty;
+
+#if DEBUG
+            hubName = Settings.AZURE_NOTIFICATIONHUB_NAME_SANDBOX;
+            hubConnectionString = Settings.AZURE_NOTIFICATIONHUB_CONNECTIONSTRING_SANDBOX;
+#else
+            hubName = Settings.AZURE_NOTIFICATIONHUB_NAME_PROD;
+            hubConnectionString = Settings.AZURE_NOTIFICATIONHUB_CONNECTIONSTRING_PROD;
+#endif
+
+            _Hub = new NotificationHub(hubName, hubConnectionString, this);
 
             var tags = new List<string>() { };
             var regID = _Hub.Register(token, tags.ToArray()).RegistrationId;
