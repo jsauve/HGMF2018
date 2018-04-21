@@ -11,11 +11,15 @@ using FFImageLoading.Forms.Touch;
 using HGMF2018.Core;
 using WindowsAzure.Messaging;
 using System;
+using AudioToolbox;
+using ObjCRuntime;
+using System.Linq;
+using UserNotifications;
 
 namespace HGMF2018.iOS
 {
     [Register("AppDelegate")]
-    public partial class AppDelegate : FormsApplicationDelegate
+    public partial class AppDelegate : FormsApplicationDelegate, IUNUserNotificationCenterDelegate
     {
         SBNotificationHub _Hub;
 
@@ -44,20 +48,39 @@ namespace HGMF2018.iOS
 
         void RegisterForNotifications()
         {
-            if (UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
+            // Request notification permissions from the user
+            UNUserNotificationCenter.Current.RequestAuthorization(UNAuthorizationOptions.Alert, (approved, err) =>
             {
-                var pushSettings = UIUserNotificationSettings.GetSettingsForTypes(
-                       UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound,
-                       new NSSet());
+                InvokeOnMainThread(() =>
+                {
+                    // Handle approval
+                    UIApplication.SharedApplication.RegisterForRemoteNotifications();
 
-                UIApplication.SharedApplication.RegisterUserNotificationSettings(pushSettings);
-                UIApplication.SharedApplication.RegisterForRemoteNotifications();
-            }
-            else
-            {
-                UIRemoteNotificationType notificationTypes = UIRemoteNotificationType.Alert | UIRemoteNotificationType.Badge | UIRemoteNotificationType.Sound;
-                UIApplication.SharedApplication.RegisterForRemoteNotificationTypes(notificationTypes);
-            }
+                    // Watch for notifications while the app is active
+                    UNUserNotificationCenter.Current.Delegate = this;
+                });
+            });
+        }
+
+        // this method is called if a notification is recieved when the app is in the foreground
+        [Export("userNotificationCenter:willPresentNotification:withCompletionHandler:")]
+        public void WillPresentNotification(UNUserNotificationCenter center, UNNotification notification, Action<UNNotificationPresentationOptions> completionHandler)
+        {
+            // Do something with the notification
+            Console.WriteLine("Active Notification: {0}", notification);
+
+            // Tell system to display the notification anyway or use
+            // `None` to say we have handled the display locally.
+            completionHandler(UNNotificationPresentationOptions.Alert);
+            SystemSound.Vibrate.PlayAlertSound();
+            SystemSound.Vibrate.PlaySystemSound();
+        }
+
+        // this method is called when a notification is tapped
+        [Export("userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:")]
+        public void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, Action completionHandler)
+        {
+            // handle notifcation tap action here
         }
 
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
@@ -90,44 +113,57 @@ namespace HGMF2018.iOS
             });
 		}
 
-        public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
-        {
-            ProcessNotification(userInfo, false);
-        }
 
-        void ProcessNotification(NSDictionary options, bool fromFinishedLaunching)
-        {
-            // Check to see if the dictionary has the aps key.  This is the notification payload you would have sent
-            if (null != options && options.ContainsKey(new NSString("aps")))
-            {
-                //Get the aps dictionary
-                NSDictionary aps = options.ObjectForKey(new NSString("aps")) as NSDictionary;
 
-                string alert = string.Empty;
+		//public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
+        //{
+        //    ProcessNotification(userInfo, false);
+        //}
 
-                //Extract the alert text
-                // NOTE: If you're using the simple alert by just specifying
-                // "  aps:{alert:"alert msg here"}  ", this will work fine.
-                // But if you're using a complex alert with Localization keys, etc.,
-                // your "alert" object from the aps dictionary will be another NSDictionary.
-                // Basically the JSON gets dumped right into a NSDictionary,
-                // so keep that in mind.
-                if (aps.ContainsKey(new NSString("alert")))
-                    alert = (aps[new NSString("alert")] as NSString).ToString();
+        //void ProcessNotification(NSDictionary options, bool fromFinishedLaunching)
+        //{
+        //    // Check to see if the dictionary has the aps key.  This is the notification payload you would have sent
+        //    if (null != options && options.ContainsKey(new NSString("aps")))
+        //    {
+        //        //Get the aps dictionary
+        //        NSDictionary aps = options.ObjectForKey(new NSString("aps")) as NSDictionary;
 
-                //If this came from the ReceivedRemoteNotification while the app was running,
-                // we of course need to manually process things like the sound, badge, and alert.
-                if (!fromFinishedLaunching)
-                {
-                    //Manually show an alert
-                    if (!string.IsNullOrEmpty(alert))
-                    {
-                        UIAlertView avAlert = new UIAlertView("Notification", alert, null, "OK", null);
-                        avAlert.Show();
-                    }
-                }
-            }
-        }
+        //        string alert = string.Empty;
+
+        //        //Extract the alert text
+        //        // NOTE: If you're using the simple alert by just specifying
+        //        // "  aps:{alert:"alert msg here"}  ", this will work fine.
+        //        // But if you're using a complex alert with Localization keys, etc.,
+        //        // your "alert" object from the aps dictionary will be another NSDictionary.
+        //        // Basically the JSON gets dumped right into a NSDictionary,
+        //        // so keep that in mind.
+        //        if (aps.ContainsKey(new NSString("alert")))
+        //        {
+        //            var alertDict = (aps[new NSString("alert")] as NSDictionary);
+        //            alert = (alertDict[new NSString("body")] as NSString)?.ToString();
+        //        }
+
+        //        //If this came from the ReceivedRemoteNotification while the app was running,
+        //        // we of course need to manually process things like the sound, badge, and alert.
+        //        if (!fromFinishedLaunching)
+        //        {
+        //            //Manually show an alert
+        //            //if (!string.IsNullOrEmpty(alert))
+        //            //{
+        //            //    UIAlertView avAlert = new UIAlertView("Notification", alert, null, "OK", null);
+        //            //    avAlert.Show();
+        //            //}
+
+        //            // navigate to tweet list or individual tweet
+        //            // TODO: write this code
+        //        }
+
+        //        InvokeOnMainThread(() => { 
+        //            SystemSound.Vibrate.PlayAlertSound();
+        //            SystemSound.Vibrate.PlaySystemSound();
+        //        });
+        //    }
+        //}
 
 		public override bool WillFinishLaunching(UIApplication uiApplication, NSDictionary launchOptions)
         {
