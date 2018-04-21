@@ -19,13 +19,15 @@ namespace HGMF2018.Droid
     [Activity(Label = "HGMF2018", Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
+        public const string TAG = "MainActivity";
+
         protected override void OnCreate(Bundle bundle)
         {
-
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
+
 
             UserDialogs.Init(this);
 
@@ -35,14 +37,19 @@ namespace HGMF2018.Droid
 
             CarouselViewRenderer.Init();
 
+            if (Intent.Extras != null)
+            {
+                foreach (var key in Intent.Extras.KeySet())
+                {
+                    if (key != null)
+                    {
+                        var value = Intent.Extras.GetString(key);
+                        Log.Debug(TAG, "Key: {0} Value: {1}", key, value);
+                    }
+                }
+            }
+
             LoadApplication(new App());
-        }
-
-        protected override void OnResume()
-        {
-            base.OnResume();
-
-            //TODO: Put version-checking code here
         }
 
         public override bool OnMenuOpened(int featureId, IMenu menu)
