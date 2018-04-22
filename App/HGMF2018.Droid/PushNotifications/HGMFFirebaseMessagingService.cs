@@ -6,6 +6,7 @@ using Android.Util;
 using Firebase.Messaging;
 using System.Collections.Generic;
 using System.Linq;
+using Android.OS;
 
 namespace HGMF2018.Droid
 {
@@ -51,6 +52,16 @@ namespace HGMF2018.Droid
 
             var notificationManager = NotificationManager.FromContext(this);
             notificationManager.Notify(0, notificationBuilder.Build());
+
+            Vibrator vibrator = (Vibrator)this.ApplicationContext.GetSystemService(Context.VibratorService);
+            if ((int)Build.VERSION.SdkInt >= 26)
+            {
+                vibrator.Vibrate(VibrationEffect.CreateOneShot(150, 10));
+            }
+            else
+            {
+                vibrator.Vibrate(150);
+            }
         }
     }
 }
