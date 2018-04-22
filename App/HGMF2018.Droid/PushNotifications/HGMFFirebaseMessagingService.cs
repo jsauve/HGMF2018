@@ -43,7 +43,7 @@ namespace HGMF2018.Droid
             var pendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.OneShot);
 
             var notificationBuilder = new Notification.Builder(this)
-                .SetSmallIcon(Resource.Drawable.notification_icon)
+                .SetSmallIcon(Resource.Drawable.icon)
                 .SetContentTitle("Cluck, cluck...news from The Homegrown Chicken!")
                 .SetContentText(messageBody)
                 .SetAutoCancel(true)
