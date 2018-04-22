@@ -83,7 +83,30 @@ namespace HGMF2018.iOS
             // handle notifcation tap action here
         }
 
-        public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
+  //      [Export("application:didReceiveLocalNotification:")]
+  //      public void ReceivedLocalNotification(UIApplication application, UILocalNotification notification)
+  //      {
+            
+  //      }
+
+  //      [Export("application:didReceiveRemoteNotification:")]
+  //      public void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
+  //      {
+            
+  //      }
+
+		//public override void HandleAction(UIApplication application, string actionIdentifier, NSDictionary remoteNotificationInfo, NSDictionary responseInfo, Action completionHandler)
+		//{
+  //          base.HandleAction(application, actionIdentifier, remoteNotificationInfo, responseInfo, completionHandler);
+		//}
+
+        //[Export("application:didReceiveRemoteNotification:fetchCompletionHandler:")]
+        //public void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
+        //{
+            
+        //}
+
+		public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
             var hubName = String.Empty;
             var hubConnectionString = String.Empty;
