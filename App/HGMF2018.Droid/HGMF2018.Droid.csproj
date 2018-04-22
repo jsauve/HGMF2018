@@ -307,11 +307,6 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\HGMFsplash.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\HGMFsplash.png" />
     <AndroidResource Include="Resources\drawable-hdpi\HGMFsplash.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\notification_icon.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\notification_icon.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\notification_icon.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\notification_icon.png" />
-    <AndroidResource Include="Resources\drawable\notification_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-xxxhdpi\" />
