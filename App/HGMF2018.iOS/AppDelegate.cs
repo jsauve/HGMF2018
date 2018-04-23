@@ -22,6 +22,7 @@ namespace HGMF2018.iOS
     public partial class AppDelegate : FormsApplicationDelegate, IUNUserNotificationCenterDelegate
     {
         SBNotificationHub _Hub;
+        INotificationNavigationService _NotificationNavigationService;
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
@@ -42,6 +43,8 @@ namespace HGMF2018.iOS
             LoadApplication(new App());
 
             RegisterForNotifications();
+
+            _NotificationNavigationService = DependencyService.Get<INotificationNavigationService>();
 
             return base.FinishedLaunching(app, options);
         }
@@ -80,7 +83,7 @@ namespace HGMF2018.iOS
         [Export("userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:")]
         public void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, Action completionHandler)
         {
-            // handle notifcation tap action here
+            _NotificationNavigationService.OnNotificationReceived();
         }
 
   //      [Export("application:didReceiveLocalNotification:")]
@@ -138,10 +141,10 @@ namespace HGMF2018.iOS
 
 
 
-		//public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
-        //{
-        //    ProcessNotification(userInfo, false);
-        //}
+		public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
+        {
+            //ProcessNotification(userInfo, false);
+        }
 
         //void ProcessNotification(NSDictionary options, bool fromFinishedLaunching)
         //{

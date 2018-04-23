@@ -270,6 +270,12 @@
     <Reference Include="Xamarin.Azure.NotificationHubs.Android">
       <HintPath>..\packages\Xamarin.Azure.NotificationHubs.Android.0.4.0\lib\MonoAndroid403\Xamarin.Azure.NotificationHubs.Android.dll</HintPath>
     </Reference>
+    <Reference Include="Plugin.Settings.Abstractions">
+      <HintPath>..\packages\Xam.Plugins.Settings.3.1.1\lib\MonoAndroid10\Plugin.Settings.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Settings">
+      <HintPath>..\packages\Xam.Plugins.Settings.3.1.1\lib\MonoAndroid10\Plugin.Settings.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Resources\Resource.designer.cs" />
@@ -284,6 +290,9 @@
     <Compile Include="PushNotifications\HGMFFirebaseIIDService.cs" />
     <Compile Include="PushNotifications\HGMFFirebaseMessagingService.cs" />
     <Compile Include="PushNotifications\AzureNotificationHubService.cs" />
+    <Compile Include="Services\NotificationNavigationService.cs" />
+    <Compile Include="PushNotifications\NotificationHelper.cs" />
+    <Compile Include="Helpers\Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -308,6 +317,11 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\HGMFsplash.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\HGMFsplash.png" />
     <AndroidResource Include="Resources\drawable-hdpi\HGMFsplash.png" />
+    <AndroidResource Include="Resources\drawable\icon_notification.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icon_notification.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\icon_notification.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\icon_notification.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icon_notification.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable-xxxhdpi\" />

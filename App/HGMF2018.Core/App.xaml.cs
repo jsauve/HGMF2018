@@ -14,7 +14,8 @@ namespace HGMF2018.Core
 {
     public partial class App : Application
     {
-        const string _RootAddress = "https://www.duluthhomegrown.org/";
+        const string _RootUrl = "https://www.duluthhomegrown.org/";
+        const string _FestivalUpdatesUrl = "https://www.duluthhomegrown.org/festival-alerts";
 
         const string _iOSAppStoreUrl = "https://itunes.apple.com/us/app/duluth-homegrown-2018/id1371299649";
         const string _AndroidAppStoreUrl = "https://play.google.com/store/apps/details?id=org.duluthhomegrown.hgmf2018";
@@ -35,6 +36,7 @@ namespace HGMF2018.Core
         IVersionRetrievalService _VersionRetrievalService;
         IUberService _UberService;
         ILyftService _LyftService;
+        INotificationNavigationService _NotificationNavigationService;
 
         IEnumerable<string> _BannedDomains;
 
@@ -58,7 +60,7 @@ namespace HGMF2018.Core
 
             _WebView = new WebView()
             {
-                Source = _RootAddress,
+                Source = _RootUrl,
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.FillAndExpand, 
             };
@@ -128,6 +130,10 @@ namespace HGMF2018.Core
 
             // iOS needs the ToolbarItems added before display
             SetupToolbarItemsForiOS();
+
+            _NotificationNavigationService = DependencyService.Get<INotificationNavigationService>();
+
+            _NotificationNavigationService.NotificationReceived += (sender, e) => { _WebView.Source = _FestivalUpdatesUrl; };
 
             MainPage = _NavPage;
         }
@@ -218,11 +224,11 @@ namespace HGMF2018.Core
                 switch (Device.RuntimePlatform)
                 {
                     case Device.iOS:
-                        azureFunctionAppVersionApiKey = Settings.AZURE_FUNCTION_IOSVERSION_API_KEY;
+                        azureFunctionAppVersionApiKey = Settings.AzureFunctioniOSVersionApiKey;
                         versionApiPath = _HGMF2018AppVersionApiIosPath;
                         break;
                     case Device.Android:
-                        azureFunctionAppVersionApiKey = Settings.AZURE_FUNCTION_ANDROIDVERSION_API_KEY;
+                        azureFunctionAppVersionApiKey = Settings.AzureFunctionAndroidVersionApiKey;
                         versionApiPath = _HGMF2018AppVersionApiAndroidPath;
                         break;
                 }

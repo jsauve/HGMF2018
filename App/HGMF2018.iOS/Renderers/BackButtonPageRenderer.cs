@@ -6,12 +6,11 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(BackButtonPage), typeof(CustomBackButtonPageRenderer))]
+[assembly: ExportRenderer(typeof(BackButtonPage), typeof(BackButtonPageRenderer))]
 namespace HGMF2018.iOS
 {
-    public class CustomBackButtonPageRenderer : PageRenderer
+    public class BackButtonPageRenderer : PageRenderer
     {
-
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();

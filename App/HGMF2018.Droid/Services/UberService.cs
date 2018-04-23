@@ -17,7 +17,7 @@ namespace HGMF2018.Droid
         public async Task Open()
         {
             if (IsInstalled)
-                OpenLink($"uber://?action=setPickup&pickup=my_location&client_id={Settings.UBER_CLIENT_ID}");
+                OpenLink($"uber://?action=setPickup&pickup=my_location&client_id={Settings.UberClientId}");
             else
             {
                 await DependencyService.Get<IUserDialogService>().ShowConfirmOrCancelDialog(

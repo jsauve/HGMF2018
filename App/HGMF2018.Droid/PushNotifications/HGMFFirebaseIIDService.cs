@@ -5,6 +5,7 @@ using WindowsAzure.Messaging;
 using HGMF2018.Core;
 using System.Collections.Generic;
 using System;
+using Xamarin.Forms;
 
 namespace HGMF2018.Droid
 {
@@ -27,11 +28,11 @@ namespace HGMF2018.Droid
             var hubConnectionString = String.Empty;
 
 #if DEBUG
-            hubName = Settings.AZURE_NOTIFICATIONHUB_NAME_SANDBOX;
-            hubConnectionString = Settings.AZURE_NOTIFICATIONHUB_CONNECTIONSTRING_SANDBOX;
+            hubName = Settings.AzureNotifcationHubNameSandbox;
+            hubConnectionString = Settings.AzureNotifcationHubConnectionStringSandbox;
 #else
-            hubName = Settings.AZURE_NOTIFICATIONHUB_NAME_PROD;
-            hubConnectionString = Settings.AZURE_NOTIFICATIONHUB_CONNECTIONSTRING_PROD;
+            hubName = Settings.AzureNotifcationHubNameProd;
+            hubConnectionString = Settings.AzureNotifcationHubConnectionStringProd;
 #endif
 
             _Hub = new NotificationHub(hubName, hubConnectionString, this);

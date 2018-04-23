@@ -13,6 +13,10 @@ using Android.Gms.Common;
 using Firebase.Messaging;
 using Firebase.Iid;
 using Android.Util;
+using Plugin.CurrentActivity;
+using Android.Content;
+using System.Collections.Generic;
+using System;
 
 namespace HGMF2018.Droid
 {
@@ -21,6 +25,10 @@ namespace HGMF2018.Droid
     {
         public const string TAG = "MainActivity";
 
+        Lazy<App> _LazyApp = new Lazy<App>(() => new App());
+
+        INotificationNavigationService _NotificationNavigationService;
+
         protected override void OnCreate(Bundle bundle)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -28,28 +36,165 @@ namespace HGMF2018.Droid
 
             base.OnCreate(bundle);
 
+            if (Intent != null && Intent.Extras != null && Intent.Extras.Size() > 0)
+            {
+                Log.Debug(TAG, "Received extras in onCreate()");
+
+                Bundle extras = Intent.Extras;
+
+                foreach (var key in extras.KeySet())
+                {
+                    if (key != null)
+                    {
+                        Log.Debug(TAG, "Key: {0} Value: {1}", key, extras.GetString(key));
+                        if (key == "tweetUrl")
+                        {
+                            //_NotificationNavigationService.OnNotificationReceived();
+                        }
+                    }
+                }
+            }
 
             UserDialogs.Init(this);
 
             Forms.Init(this, bundle);
 
+            _NotificationNavigationService = DependencyService.Get<INotificationNavigationService>();
+
             CachedImageRenderer.Init(true);
 
             CarouselViewRenderer.Init();
 
-            if (Intent.Extras != null)
+            LoadApplication(_LazyApp.Value);
+
+            //if (Intent != null && Intent.Extras != null && Intent.Extras.Size() > 0)
+            //{
+            //    Log.Debug(TAG, "Received extras in onCreate()");
+
+            //    Bundle extras = Intent.Extras;
+
+            //    foreach (var key in extras.KeySet())
+            //    {
+            //        if (key != null)
+            //        {
+            //            Log.Debug(TAG, "Key: {0} Value: {1}", key, extras.GetString(key));
+            //            if (key == "tweetUrl")
+            //                _NotificationNavigationService.OnNotificationReceived();
+            //        }
+            //    }
+            //}
+        }
+
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+
+            Log.Debug(TAG, "onNewIntent() called.");
+
+            Intent = intent;
+
+            if (intent != null && intent.Extras != null && intent.Extras.Size() > 0)
             {
-                foreach (var key in Intent.Extras.KeySet())
+                Log.Debug(TAG, "Received extras in onNewIntent()");
+
+                Bundle extras = Intent.Extras;
+
+                foreach (var key in extras.KeySet())
                 {
                     if (key != null)
                     {
-                        var value = Intent.Extras.GetString(key);
-                        Log.Debug(TAG, "Key: {0} Value: {1}", key, value);
+                        Log.Debug(TAG, "Key: {0} Value: {1}", key, extras.GetString(key));
+                        if (key == "tweetUrl")
+                            _NotificationNavigationService.OnNotificationReceived();
                     }
                 }
             }
+        }
 
-            LoadApplication(new App());
+        //void NavigateUponNotificationIntent(Intent intent)
+        //{
+        //    var keySet = intent?.Extras?.KeySet()?.ToList();
+        //    if (keySet != null)
+        //    {
+        //        foreach (var key in keySet)
+        //        {
+        //            if (key != null)
+        //            {
+        //                if (key == "tweetUrl")
+        //                {
+        //                    var value = intent.Extras.GetString(key);
+        //                    Log.Debug(TAG, "Key: {0} Value: {1}", key, value);
+        //                    _NotificationNavigationService.OnNotificationReceived();
+
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+        }
+
+        protected override void OnPause()
+        {
+            base.OnPause();
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+        }
+
+        public override void OnActivityReenter(int resultCode, Intent data)
+        {
+            base.OnActivityReenter(resultCode, data);
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+        }
+
+        public override void StartActivity(Intent intent)
+        {
+            base.StartActivity(intent);
+        }
+
+        public override void StartActivity(Intent intent, Bundle options)
+        {
+            base.StartActivity(intent, options);
+        }
+
+        public override bool StartActivityIfNeeded(Intent intent, int requestCode, Bundle options)
+        {
+            return base.StartActivityIfNeeded(intent, requestCode, options);
+        }
+
+        public override void StartActivityForResult(Intent intent, int requestCode)
+        {
+            base.StartActivityForResult(intent, requestCode);
+        }
+
+        public override void StartActivityForResult(Intent intent, int requestCode, Bundle options)
+        {
+            base.StartActivityForResult(intent, requestCode, options);
+        }
+
+        public override bool StartActivityIfNeeded(Intent intent, int requestCode)
+        {
+            return base.StartActivityIfNeeded(intent, requestCode);
         }
 
         public override bool OnMenuOpened(int featureId, IMenu menu)
@@ -112,17 +257,17 @@ namespace HGMF2018.Droid
         // Just temporary. Don't leave this is in final implementation.
         string notificationTextPlaceholderVar = string.Empty;
 
-        public bool IsPlayServicesAvailable ()
+        public bool IsPlayServicesAvailable()
         {
-            int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable (this);
+            int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
             if (resultCode != ConnectionResult.Success)
             {
-                if (GoogleApiAvailability.Instance.IsUserResolvableError (resultCode))
-                    notificationTextPlaceholderVar = GoogleApiAvailability.Instance.GetErrorString (resultCode);
+                if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))
+                    notificationTextPlaceholderVar = GoogleApiAvailability.Instance.GetErrorString(resultCode);
                 else
                 {
                     notificationTextPlaceholderVar = "This device is not supported";
-                    Finish ();
+                    Finish();
                 }
                 return false;
             }
