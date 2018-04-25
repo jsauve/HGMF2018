@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Reflection;
 using HGMF2018.Core;
 using HGMF2018.Droid;
-using Microsoft.Azure.Mobile.Analytics;
+using Microsoft.AppCenter.Analytics;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(LoggerService))]

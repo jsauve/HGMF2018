@@ -15,7 +15,7 @@ namespace HGMF2018.iOS
         public async Task Open()
         {
             if (IsInstalled)
-                UIApplication.SharedApplication.OpenUrl(new NSUrl($"uber://?action=setPickup&pickup=my_location&client_id={Settings.UBER_CLIENT_ID}"));
+                UIApplication.SharedApplication.OpenUrl(new NSUrl($"uber://?action=setPickup&pickup=my_location&client_id={Settings.UberClientId}"));
             else
             {
                 await DependencyService.Get<IUserDialogService>().ShowConfirmOrCancelDialog(

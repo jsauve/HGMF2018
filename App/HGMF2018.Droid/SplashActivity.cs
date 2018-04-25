@@ -16,12 +16,14 @@ namespace HGMF2018.Droid
 			base.OnCreate(savedInstanceState, persistentState);
 		}
 
-		// Launches the startup task
-		protected async override void OnResume()
+		protected override void OnResume()
 		{
 			base.OnResume();
 
-            StartActivity(new Intent(Application.Context, typeof(MainActivity)));
+            var mainIntent = new Intent(Application.Context, typeof(MainActivity));
+            if (Intent?.Extras?.Size() > 0)
+                mainIntent.PutExtras(Intent.Extras);
+            StartActivity(mainIntent);
 		}
 
 		public override void OnBackPressed() { }

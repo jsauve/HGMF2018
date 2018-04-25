@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Semver;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 using strings = HGMF2018.Core.Constants;
-
-[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
 namespace HGMF2018.Core
 {
-    public partial class App : Application
+    public class App : Application, INotifyPropertyChanged
     {
-        const string _RootUrl = "https://www.duluthhomegrown.org/";
+        string _RootUrl = String.Empty;
+
         const string _FestivalUpdatesUrl = "https://www.duluthhomegrown.org/festival-alerts";
 
         const string _iOSAppStoreUrl = "https://itunes.apple.com/us/app/duluth-homegrown-2018/id1371299649";
@@ -26,7 +26,7 @@ namespace HGMF2018.Core
 
         static string _CurrentUrl = "";
 
-        static int _NavCount = 0;
+        static int _NavCount;
         static bool _IsFirstNav = true;
         static bool _IsBackNav;
 
@@ -38,37 +38,72 @@ namespace HGMF2018.Core
         ILyftService _LyftService;
         INotificationNavigationService _NotificationNavigationService;
 
-        IEnumerable<string> _BannedDomains;
+        IEnumerable<string> _BannedDomains = new List<string>();
 
         WebView _WebView;
         BackButtonPage _BackButtonPage;
         NavigationPage _NavPage;
+        ActivityIndicator _ActivityIndicator;
 
         public App()
         {
-            InitializeComponent();
+            //InitializeComponent();
 
-            _BannedDomains = new List<string>()
-            {
-                "youtube.com"
-            };
+            ResolveServices();
 
+            SetupViewHierarchy();
+
+            SetupEvents();
+        }
+
+        void ResolveServices()
+        {
             _UserDialogService = DependencyService.Get<IUserDialogService>();
             _VersionRetrievalService = DependencyService.Get<IVersionRetrievalService>();
             _UberService = DependencyService.Get<IUberService>();
             _LyftService = DependencyService.Get<ILyftService>();
+            _NotificationNavigationService = DependencyService.Get<INotificationNavigationService>();
+        }
+
+        void SetupViewHierarchy()
+        {
+            _ActivityIndicator = new ActivityIndicator()
+            {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                Color = Color.White,
+                BackgroundColor = Color.FromRgba(0, 0, 0, 0.7)
+            };
+
+            var _ActivityIndicatorContainer = new ContentView();
 
             _WebView = new WebView()
             {
-                Source = _RootUrl,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                HorizontalOptions = LayoutOptions.FillAndExpand, 
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.Black
             };
+
+            var layout = new RelativeLayout();
+
+            layout.Children.Add(
+                _WebView,
+                xConstraint: Constraint.RelativeToParent(p => p.X),
+                yConstraint: Constraint.RelativeToParent(p => p.Y),
+                widthConstraint: Constraint.RelativeToParent(p => p.Width),
+                heightConstraint: Constraint.RelativeToParent(p => p.Height));
+
+            layout.Children.Add(
+                _ActivityIndicator,
+                xConstraint: Constraint.RelativeToParent(p => (p.Width - (p.Width * 0.2)) / 2),
+                yConstraint: Constraint.RelativeToParent(p => (p.Height - (p.Width * 0.2)) / 2),
+                widthConstraint: Constraint.RelativeToParent(p => p.Width * 0.2),
+                heightConstraint: Constraint.RelativeToParent(p => p.Width * 0.2)
+            );
 
             _BackButtonPage = new BackButtonPage()
             {
-                Title = "#HGMF2018",
-                Content = _WebView,
+                Content = layout,
                 CustomBackButtonAction = new Action(() =>
                 {
                     _IsBackNav = true;
@@ -76,6 +111,15 @@ namespace HGMF2018.Core
                 })
             };
 
+            _NavPage = new NavigationPage(_BackButtonPage) { BarBackgroundColor = Color.Black, BarTextColor = Color.White };
+
+            MainPage = _NavPage;
+
+            SetupToolbarItemsForiOS();
+        }
+
+        void SetupEvents()
+        {
             _WebView.Navigating += async (object sender, WebNavigatingEventArgs e) =>
             {
                 if (Device.RuntimePlatform == Device.Android)
@@ -84,6 +128,9 @@ namespace HGMF2018.Core
 
                     if (!String.IsNullOrWhiteSpace(host))
                     {
+                        if (_BannedDomains == null || _BannedDomains?.Count() < 1)
+                            _BannedDomains = await FetchBannedDomainsAsync();
+
                         foreach (var banned in _BannedDomains)
                         {
                             if (host.Contains(banned))
@@ -120,29 +167,33 @@ namespace HGMF2018.Core
                     _NavCount++;
                 }
 
-                if (_NavCount >= 1)
-                    _BackButtonPage.EnableBackButtonOverride = true;
-                else
-                    _BackButtonPage.EnableBackButtonOverride = false;
+                if (new Uri((e.Source as UrlWebViewSource).Url).Equals(_RootUrl))
+                    _NavCount = 0;
+
+                SetBackButton();
             };
 
-            _NavPage = new NavigationPage(_BackButtonPage) { BarBackgroundColor = Color.Black, BarTextColor = Color.White };
+            _NotificationNavigationService.NotificationReceived += (sender, e) =>
+            {
+                _WebView.Source = _FestivalUpdatesUrl;
 
-            // iOS needs the ToolbarItems added before display
-            SetupToolbarItemsForiOS();
+                _NavCount = 0;
+            };
+        }
 
-            _NotificationNavigationService = DependencyService.Get<INotificationNavigationService>();
-
-            _NotificationNavigationService.NotificationReceived += (sender, e) => { _WebView.Source = _FestivalUpdatesUrl; };
-
-            MainPage = _NavPage;
+        void SetBackButton()
+        {
+            if (_NavCount >= 1)
+                _BackButtonPage.EnableBackButtonOverride = true;
+            else
+                _BackButtonPage.EnableBackButtonOverride = false;
         }
 
         protected override async void OnStart()
         {
             base.OnStart();
 
-            SetupToolbarItemsForAndroid();
+            await FetchStartupValues();
 
             await CheckForNewVersionAsync();
         }
@@ -151,9 +202,53 @@ namespace HGMF2018.Core
         {
             base.OnResume();
 
+            await CheckForNewVersionAsync();
+        }
+
+        void ActivityIndicatorOn()
+        {
+            _ActivityIndicator.IsEnabled = true;
+            _ActivityIndicator.IsVisible = true;
+            _ActivityIndicator.IsRunning = true;
+            _WebView.IsEnabled = false;
+        }
+
+        void ActivityIndicatorOff()
+        {
+            _ActivityIndicator.IsEnabled = false;
+            _ActivityIndicator.IsVisible = false;
+            _ActivityIndicator.IsRunning = false;
+            _WebView.IsEnabled = true;
+        }
+
+        async Task FetchStartupValues()
+        {
             SetupToolbarItemsForAndroid();
 
-            await CheckForNewVersionAsync();
+            ActivityIndicatorOn();
+
+            try
+            {
+                _BackButtonPage.Title = await FetchNavBarTextAsync();
+
+                _BannedDomains = await FetchBannedDomainsAsync();
+
+                if (_WebView.Source == null)
+                {
+                    if (String.IsNullOrWhiteSpace(_RootUrl))
+                        _RootUrl = await FetchRootUrlAsync();
+
+                    _WebView.Source = _RootUrl;
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.ReportError();
+            }
+            finally
+            {
+                ActivityIndicatorOff();
+            }
         }
 
         async Task CheckForNewVersionAsync()
@@ -214,7 +309,72 @@ namespace HGMF2018.Core
 
         async Task<bool> NewerVersionIsAvailable()
         {
-            bool result = false;
+            var availableVersionString = await FetchAvailableVersionStringAsync();
+
+            var currentVersionString = DependencyService.Get<IVersionRetrievalService>().Version;
+
+            if (String.IsNullOrWhiteSpace(availableVersionString) || String.IsNullOrWhiteSpace(currentVersionString))
+                return false;
+
+            SemVersion.TryParse(availableVersionString, out var availableVersion);
+            SemVersion.TryParse(currentVersionString, out var currentVersion);
+
+            return (availableVersion > currentVersion);
+        }
+
+        async Task<string> FetchNavBarTextAsync()
+        {
+            var result = "#HGMF2018";
+
+            try
+            {
+                result = await _HttpClient.GetStringAsync($"https://hgmf2018.azurewebsites.net/api/NavBarText?code={Settings.AzureFunctionNavBarTextApiKey}");
+            }
+            catch (Exception ex)
+            {
+                ex.ReportError();
+            }
+
+            return result;
+        }
+
+        async Task<IEnumerable<string>> FetchBannedDomainsAsync()
+        {
+            var result = new List<string>();
+
+            try
+            {
+                var json = await _HttpClient.GetStringAsync($"https://hgmf2018.azurewebsites.net/api/BannedDomains?code={Settings.AzureFunctionBannedDomainsApiKey}");
+
+                result = JsonConvert.DeserializeObject<IEnumerable<string>>(json).ToList();
+            }
+            catch (Exception ex)
+            {
+                ex.ReportError();
+            }
+
+            return result;
+        }
+
+        async Task<string> FetchRootUrlAsync()
+        {
+            var result = "https://www.duluthhomegrown.org/";
+
+            try
+            {
+                result = await _HttpClient.GetStringAsync($"https://hgmf2018.azurewebsites.net/api/RootUrl?code={Settings.AzureFunctionRootUrlApiKey}");
+            }
+            catch (Exception ex)
+            {
+                ex.ReportError();
+            }
+
+            return result;
+        }
+
+        async Task<string> FetchAvailableVersionStringAsync()
+        {
+            var result = "0.0.0";
 
             try
             {
@@ -234,18 +394,9 @@ namespace HGMF2018.Core
                 }
 
                 if (String.IsNullOrWhiteSpace(azureFunctionAppVersionApiKey))
-                    return false;
+                    throw new Exception("azureFunctionAppVersionApiKey is null or whitespace");
 
-                var availableVersionString = await _HttpClient.GetStringAsync($"{_HGMF2018AppVersionApiBase}{versionApiPath}?code={azureFunctionAppVersionApiKey}");
-                var currentVersionString = DependencyService.Get<IVersionRetrievalService>().Version;
-
-                if (String.IsNullOrWhiteSpace(availableVersionString) || String.IsNullOrWhiteSpace(currentVersionString))
-                    return false;
-
-                SemVersion.TryParse(availableVersionString, out var availableVersion);
-                SemVersion.TryParse(currentVersionString, out var currentVersion);
-
-                return (availableVersion > currentVersion);
+                result = await _HttpClient.GetStringAsync($"{_HGMF2018AppVersionApiBase}{versionApiPath}?code={azureFunctionAppVersionApiKey}");
             }
             catch (Exception ex)
             {

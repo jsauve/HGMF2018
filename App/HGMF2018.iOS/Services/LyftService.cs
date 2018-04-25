@@ -15,7 +15,7 @@ namespace HGMF2018.iOS
         public async Task Open()
         {
             if (IsInstalled)
-                UIApplication.SharedApplication.OpenUrl(new NSUrl($"lyft://partner={Settings.LYFT_CLIENT_ID}"));
+                UIApplication.SharedApplication.OpenUrl(new NSUrl($"lyft://partner={Settings.LyftClientId}"));
             else
             {
                 await DependencyService.Get<IUserDialogService>().ShowConfirmOrCancelDialog(

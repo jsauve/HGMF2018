@@ -14,6 +14,6 @@ namespace HGMF2018.Core
         public const string NEW_VERSION_AVAILABLE_TITLE = "New Version Available";
         public const string NEW_VERSION_AVAILABLE_MESSAGE = "There is a newer version of the HGMF2018 app! Would you like to get it now?";
 
-        public const string ANDROID_NOTIFICATION_CHANNEL_GENERAL = "org.duluthhomegrown.hgmf2018.general";
+        public const string ANDROID_NOTIFICATION_CHANNEL_FESTIVALUPDATES = "org.duluthhomegrown.hgmf2018.festivalupdates";
     }
 }

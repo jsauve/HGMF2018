@@ -17,15 +17,16 @@ using Plugin.CurrentActivity;
 using Android.Content;
 using System.Collections.Generic;
 using System;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace HGMF2018.Droid
 {
-    [Activity(Label = "HGMF2018", Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "HGMF2018", Icon = "@drawable/icon", Theme = "@style/MyTheme", LaunchMode = LaunchMode.SingleTop, MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
         public const string TAG = "MainActivity";
-
-        Lazy<App> _LazyApp = new Lazy<App>(() => new App());
 
         INotificationNavigationService _NotificationNavigationService;
 
@@ -36,24 +37,10 @@ namespace HGMF2018.Droid
 
             base.OnCreate(bundle);
 
-            if (Intent != null && Intent.Extras != null && Intent.Extras.Size() > 0)
-            {
-                Log.Debug(TAG, "Received extras in onCreate()");
-
-                Bundle extras = Intent.Extras;
-
-                foreach (var key in extras.KeySet())
-                {
-                    if (key != null)
-                    {
-                        Log.Debug(TAG, "Key: {0} Value: {1}", key, extras.GetString(key));
-                        if (key == "tweetUrl")
-                        {
-                            //_NotificationNavigationService.OnNotificationReceived();
-                        }
-                    }
-                }
-            }
+#if !DEBUG
+            AppCenter.Start(Settings.AppCenterAndroidKey, typeof(Analytics), typeof(Crashes));
+            //Pyze.Initialize(this);
+#endif
 
             UserDialogs.Init(this);
 
@@ -65,24 +52,7 @@ namespace HGMF2018.Droid
 
             CarouselViewRenderer.Init();
 
-            LoadApplication(_LazyApp.Value);
-
-            //if (Intent != null && Intent.Extras != null && Intent.Extras.Size() > 0)
-            //{
-            //    Log.Debug(TAG, "Received extras in onCreate()");
-
-            //    Bundle extras = Intent.Extras;
-
-            //    foreach (var key in extras.KeySet())
-            //    {
-            //        if (key != null)
-            //        {
-            //            Log.Debug(TAG, "Key: {0} Value: {1}", key, extras.GetString(key));
-            //            if (key == "tweetUrl")
-            //                _NotificationNavigationService.OnNotificationReceived();
-            //        }
-            //    }
-            //}
+            LoadApplication(new App());
         }
 
         protected override void OnNewIntent(Intent intent)
@@ -91,110 +61,38 @@ namespace HGMF2018.Droid
 
             Log.Debug(TAG, "onNewIntent() called.");
 
-            Intent = intent;
+            NavigateUponNotificationIntent(intent);
+        }
 
-            if (intent != null && intent.Extras != null && intent.Extras.Size() > 0)
+        void NavigateUponNotificationIntent(Intent intent)
+        {
+            if (intent?.Extras?.Size() > 0)
             {
                 Log.Debug(TAG, "Received extras in onNewIntent()");
 
-                Bundle extras = Intent.Extras;
-
-                foreach (var key in extras.KeySet())
+                foreach (var key in intent.Extras.KeySet())
                 {
                     if (key != null)
                     {
-                        Log.Debug(TAG, "Key: {0} Value: {1}", key, extras.GetString(key));
+                        Log.Debug(TAG, "Key: {0} Value: {1}", key, intent.Extras.GetString(key));
                         if (key == "tweetUrl")
                             _NotificationNavigationService.OnNotificationReceived();
                     }
                 }
             }
         }
-
-        //void NavigateUponNotificationIntent(Intent intent)
-        //{
-        //    var keySet = intent?.Extras?.KeySet()?.ToList();
-        //    if (keySet != null)
-        //    {
-        //        foreach (var key in keySet)
-        //        {
-        //            if (key != null)
-        //            {
-        //                if (key == "tweetUrl")
-        //                {
-        //                    var value = intent.Extras.GetString(key);
-        //                    Log.Debug(TAG, "Key: {0} Value: {1}", key, value);
-        //                    _NotificationNavigationService.OnNotificationReceived();
-
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        protected override void OnStart()
-        {
-            base.OnStart();
-        }
-
         protected override void OnResume()
         {
             base.OnResume();
-        }
 
-        protected override void OnPause()
-        {
-            base.OnPause();
-        }
+            // Notes for sanity:
+            // The only reason that the intent contains the Extras from the 
+            // notification's PendingIntent is because I've manually forwarded
+            // the Intent from the SplachActivity, which is set as
+            // MainLauncher = true. Background notifications always hit the 
+            // launcher activity FIRST. So, you the Intent needs to be forwarded.
 
-        protected override void OnStop()
-        {
-            base.OnStop();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
-
-        public override void OnActivityReenter(int resultCode, Intent data)
-        {
-            base.OnActivityReenter(resultCode, data);
-        }
-
-        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
-        {
-            base.OnActivityResult(requestCode, resultCode, data);
-        }
-
-        public override void StartActivity(Intent intent)
-        {
-            base.StartActivity(intent);
-        }
-
-        public override void StartActivity(Intent intent, Bundle options)
-        {
-            base.StartActivity(intent, options);
-        }
-
-        public override bool StartActivityIfNeeded(Intent intent, int requestCode, Bundle options)
-        {
-            return base.StartActivityIfNeeded(intent, requestCode, options);
-        }
-
-        public override void StartActivityForResult(Intent intent, int requestCode)
-        {
-            base.StartActivityForResult(intent, requestCode);
-        }
-
-        public override void StartActivityForResult(Intent intent, int requestCode, Bundle options)
-        {
-            base.StartActivityForResult(intent, requestCode, options);
-        }
-
-        public override bool StartActivityIfNeeded(Intent intent, int requestCode)
-        {
-            return base.StartActivityIfNeeded(intent, requestCode);
+            NavigateUponNotificationIntent(Intent);
         }
 
         public override bool OnMenuOpened(int featureId, IMenu menu)

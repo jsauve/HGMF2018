@@ -28,11 +28,11 @@ namespace HGMF2018.Droid
             var hubConnectionString = String.Empty;
 
 #if DEBUG
-            hubName = Settings.AzureNotifcationHubNameSandbox;
-            hubConnectionString = Settings.AzureNotifcationHubConnectionStringSandbox;
+            hubName = Settings.AzureNotificationHubNameSandbox;
+            hubConnectionString = Settings.AzureNotificationHubConnectionStringSandbox;
 #else
-            hubName = Settings.AzureNotifcationHubNameProd;
-            hubConnectionString = Settings.AzureNotifcationHubConnectionStringProd;
+            hubName = Settings.AzureNotificationHubNameProd;
+            hubConnectionString = Settings.AzureNotificationHubConnectionStringProd;
 #endif
 
             _Hub = new NotificationHub(hubName, hubConnectionString, this);

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Reflection;
 using HGMF2018.Core;
 using HGMF2018.iOS;
-using Microsoft.Azure.Mobile.Analytics;
+using Microsoft.AppCenter.Analytics;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(LoggerService))]
@@ -55,7 +55,7 @@ namespace HGMF2018.iOS
                 if (eventName.Length > 256)
                     eventName = eventName.Substring(0, 256);
 
-                // Azure Mobile Center doesn't yet support handled exceptions, so Im hijacking the Events feature of the service to record handled exceptions
+                // Azure Mobile Center doesn't yet support handled exceptions, so I'm hijacking the Events feature of the service to record handled exceptions
                 Analytics.TrackEvent(eventName, additionalInfo);
             }
             catch (Exception ex2)

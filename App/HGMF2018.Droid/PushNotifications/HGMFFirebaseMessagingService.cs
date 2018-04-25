@@ -37,7 +37,7 @@ namespace HGMF2018.Droid
             {
                 if (_FestivalUpdatesChannel == null)
                 {
-                    _FestivalUpdatesChannel = new NotificationChannel(Constants.ANDROID_NOTIFICATION_CHANNEL_GENERAL, "Festival Updates", NotificationImportance.Default)
+                    _FestivalUpdatesChannel = new NotificationChannel(Constants.ANDROID_NOTIFICATION_CHANNEL_FESTIVALUPDATES, "Festival Updates", NotificationImportance.Default)
                     {
                         LightColor = Color.Red,
                         LockscreenVisibility = NotificationVisibility.Private
@@ -76,28 +76,37 @@ namespace HGMF2018.Droid
         {
             var intent = new Intent(this, typeof(MainActivity));
 
-            intent.SetFlags(ActivityFlags.ClearTop);
+            //intent.SetFlags(ActivityFlags.ClearTop | ActivityFlags.SingleTop);
 
             if (data != null)
                 foreach (string key in data.Keys)
+                {
+                    if (key != null)
+                        Log.Debug(TAG, "Key: {0} Value: {1}", key, data[key]);
+
                     intent.PutExtra(key, data[key]);
+                }
 
-            var pendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.CancelCurrent);
+            var pendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.UpdateCurrent);
 
-            var notificationBuilder = new Notification.Builder(this, FestivalUpdatesChannel.Id)
-                .SetSmallIcon(Resource.Drawable.icon_notification)
-                .SetContentTitle("Cluck, cluck...news from The Homegrown Chicken!")
-                .SetContentText(messageBody)
-                .SetContentIntent(pendingIntent);
+            var notificationBuilder =
+                new Notification.Builder(this, FestivalUpdatesChannel.Id)
+                                .SetAutoCancel(true)
+                                .SetOnlyAlertOnce(false)
+                                .SetSmallIcon(Resource.Drawable.icon_notification)
+                                .SetContentTitle("Cluck, cluck...news from The Homegrown Chicken!")
+                                .SetContentText(messageBody)
+                                .SetContentIntent(pendingIntent);
 
-            var notificationManager = NotificationManager.FromContext(this);
-            notificationManager.Notify(0, notificationBuilder.Build());
-
-
-            //Settings.FestivalUpdateNotificationPending = true;
+            _NotificationManager.Notify(0, notificationBuilder.Build());
         }
 
-        void Vibrate()
+		public override void OnDeletedMessages()
+		{
+            base.OnDeletedMessages();
+		}
+
+		void Vibrate()
         {
             var vibrator = (Vibrator)ApplicationContext.GetSystemService(VibratorService);
             if ((int)Build.VERSION.SdkInt >= 26)
