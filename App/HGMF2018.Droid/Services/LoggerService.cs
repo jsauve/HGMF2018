@@ -62,6 +62,7 @@ namespace HGMF2018.Droid
             {
                 // if we fail here, then there's nowher to report it, so just duck
                 System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex2.Message);
             }
         }
     }

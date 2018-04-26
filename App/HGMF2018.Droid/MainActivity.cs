@@ -23,7 +23,7 @@ using Microsoft.AppCenter.Crashes;
 
 namespace HGMF2018.Droid
 {
-    [Activity(Label = "HGMF2018", Icon = "@drawable/icon", Theme = "@style/MyTheme", LaunchMode = LaunchMode.SingleTop, MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "HGMF2018", Icon = "@drawable/icon", Theme = "@style/MyTheme", LaunchMode = LaunchMode.SingleTop, MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : FormsAppCompatActivity
     {
         public const string TAG = "MainActivity";

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Plugin.Connectivity;
 using Semver;
 using Xamarin.Forms;
 using strings = HGMF2018.Core.Constants;
 
 namespace HGMF2018.Core
 {
-    public class App : Application, INotifyPropertyChanged
+    public class App : Application
     {
         string _RootUrl = String.Empty;
 
@@ -44,11 +44,11 @@ namespace HGMF2018.Core
         BackButtonPage _BackButtonPage;
         NavigationPage _NavPage;
         ActivityIndicator _ActivityIndicator;
+        bool _NewVersionAvailable;
+        bool IsBusy;
 
         public App()
         {
-            //InitializeComponent();
-
             ResolveServices();
 
             SetupViewHierarchy();
@@ -56,6 +56,9 @@ namespace HGMF2018.Core
             SetupEvents();
         }
 
+        /// <summary>
+        /// Resolves the services.
+        /// </summary>
         void ResolveServices()
         {
             _UserDialogService = DependencyService.Get<IUserDialogService>();
@@ -65,6 +68,9 @@ namespace HGMF2018.Core
             _NotificationNavigationService = DependencyService.Get<INotificationNavigationService>();
         }
 
+        /// <summary>
+        /// Setup the view hierarchy.
+        /// </summary>
         void SetupViewHierarchy()
         {
             _ActivityIndicator = new ActivityIndicator()
@@ -81,13 +87,35 @@ namespace HGMF2018.Core
             {
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                BackgroundColor = Color.Black
+                BackgroundColor = Color.Black,
             };
+
+            var versionLabel = new Label()
+            {
+                Text = $"v{_VersionRetrievalService.Version}",
+                FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)),
+                TextColor = Color.FromRgb(50, 50, 50),
+                BackgroundColor = Color.Black,
+                HorizontalTextAlignment = TextAlignment.End
+            };
+
+            var labelContent = new ContentView()
+            {
+                Content = versionLabel,
+                BackgroundColor = Color.Black,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.Start,
+                Margin = new Thickness(17, 0)
+            };
+
+            var stackLayout = new StackLayout() { Spacing = 0, BackgroundColor = Color.Black };
+            stackLayout.Children.Add(labelContent);
+            stackLayout.Children.Add(_WebView);
 
             var layout = new RelativeLayout();
 
             layout.Children.Add(
-                _WebView,
+                stackLayout,
                 xConstraint: Constraint.RelativeToParent(p => p.X),
                 yConstraint: Constraint.RelativeToParent(p => p.Y),
                 widthConstraint: Constraint.RelativeToParent(p => p.Width),
@@ -118,10 +146,19 @@ namespace HGMF2018.Core
             SetupToolbarItemsForiOS();
         }
 
+        /// <summary>
+        /// Setup event handlers.
+        /// </summary>
         void SetupEvents()
         {
             _WebView.Navigating += async (object sender, WebNavigatingEventArgs e) =>
             {
+                if (!(await PromptIfNotConnected()))
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
                 if (Device.RuntimePlatform == Device.Android)
                 {
                     var host = new Uri(e.Url)?.Host;
@@ -181,6 +218,9 @@ namespace HGMF2018.Core
             };
         }
 
+        /// <summary>
+        /// Sets the back button.
+        /// </summary>
         void SetBackButton()
         {
             if (_NavCount >= 1)
@@ -193,19 +233,42 @@ namespace HGMF2018.Core
         {
             base.OnStart();
 
-            await FetchStartupValues();
+            if (!(await PromptIfNotConnected()))
+                return;
 
-            await CheckForNewVersionAsync();
+            // When the app starts, fetch remote values, and display activity indicator.
+            await FetchValues(true);
         }
 
         protected override async void OnResume()
         {
             base.OnResume();
 
-            await CheckForNewVersionAsync();
+            if (!(await PromptIfNotConnected()))
+                return;
+
+            // When the app resumes, fetch remote values.
+            await FetchValues();
         }
 
-        void ActivityIndicatorOn()
+        /// <summary>
+        /// Prompts if not connected.
+        /// </summary>
+        /// <returns>A Task of bool</returns>
+        async Task<bool> PromptIfNotConnected()
+        {
+            if (CrossConnectivity.IsSupported && !CrossConnectivity.Current.IsConnected)
+            {
+                await _UserDialogService.ShowAlert("No Internet!", "Please check your internet connection and try again.", "OK");
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Shows the activity indicator.
+        /// </summary>
+        void ShowActivityIndicator()
         {
             _ActivityIndicator.IsEnabled = true;
             _ActivityIndicator.IsVisible = true;
@@ -213,7 +276,10 @@ namespace HGMF2018.Core
             _WebView.IsEnabled = false;
         }
 
-        void ActivityIndicatorOff()
+        /// <summary>
+        /// Hides the activity indicator.
+        /// </summary>
+        void HideActivityIndicator()
         {
             _ActivityIndicator.IsEnabled = false;
             _ActivityIndicator.IsVisible = false;
@@ -221,25 +287,51 @@ namespace HGMF2018.Core
             _WebView.IsEnabled = true;
         }
 
-        async Task FetchStartupValues()
+        /// <summary>
+        /// Fetches the app values that we can set remotely.
+        /// </summary>
+        /// <returns>A Task.</returns>
+        /// <param name="showActivityIndicator">If set to <c>true</c>, show activity indicator.</param>
+        async Task FetchValues(bool showActivityIndicator = false)
         {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+
             SetupToolbarItemsForAndroid();
 
-            ActivityIndicatorOn();
+            if (showActivityIndicator)
+                ShowActivityIndicator();
 
             try
             {
-                _BackButtonPage.Title = await FetchNavBarTextAsync();
-
-                _BannedDomains = await FetchBannedDomainsAsync();
-
-                if (_WebView.Source == null)
+                var tasks = new List<Task>()
                 {
-                    if (String.IsNullOrWhiteSpace(_RootUrl))
-                        _RootUrl = await FetchRootUrlAsync();
+                    Task.Run(() =>
+                    {
+                        Device.BeginInvokeOnMainThread(async () => { _BackButtonPage.Title = await FetchNavBarTextAsync(); });
+                    }),
+                    Task.Run(async () =>
+                    {
+                        _BannedDomains = await FetchBannedDomainsAsync();
+                    }),
+                    Task.Run(async () =>
+                    {
+                        _NewVersionAvailable = await FetchNewerVersionIsAvailable();
+                    }),
+                    Task.Run(async () =>
+                    {
+                        if (_WebView.Source == null)
+                        {
+                            if (String.IsNullOrWhiteSpace(_RootUrl))
+                                _RootUrl = await FetchRootUrlAsync();
+                            Device.BeginInvokeOnMainThread(() => { _WebView.Source = _RootUrl; });
+                        }
+                    })
+                };
 
-                    _WebView.Source = _RootUrl;
-                }
+                await Task.WhenAll(tasks);
             }
             catch (Exception ex)
             {
@@ -247,41 +339,44 @@ namespace HGMF2018.Core
             }
             finally
             {
-                ActivityIndicatorOff();
+                IsBusy = false;
+                HideActivityIndicator();
             }
-        }
 
-        async Task CheckForNewVersionAsync()
-        {
-            if (await NewerVersionIsAvailable())
+            if (_NewVersionAvailable)
             {
+                _NewVersionAvailable = false;
+
                 await _UserDialogService.ShowConfirmOrCancelDialog(
-                    strings.NEW_VERSION_AVAILABLE_TITLE,
-                    strings.NEW_VERSION_AVAILABLE_MESSAGE,
-                    strings.OK,
-                    strings.CANCEL,
-                    () =>
+                strings.NEW_VERSION_AVAILABLE_TITLE,
+                strings.NEW_VERSION_AVAILABLE_MESSAGE,
+                strings.OK,
+                strings.CANCEL,
+                () =>
+                {
+                    var appStoreUrl = String.Empty;
+
+                    switch (Device.RuntimePlatform)
                     {
-                        var appStoreUrl = String.Empty;
+                        case Device.iOS:
+                            appStoreUrl = _iOSAppStoreUrl;
+                            break;
+                        case Device.Android:
+                            appStoreUrl = _AndroidAppStoreUrl;
+                            break;
+                    }
 
-                        switch (Device.RuntimePlatform)
-                        {
-                            case Device.iOS:
-                                appStoreUrl = _iOSAppStoreUrl;
-                                break;
-                            case Device.Android:
-                                appStoreUrl = _AndroidAppStoreUrl;
-                                break;
-                        }
+                    if (String.IsNullOrWhiteSpace(appStoreUrl))
+                        return;
 
-                        if (String.IsNullOrWhiteSpace(appStoreUrl))
-                            return;
-
-                        Device.OpenUri(new Uri(appStoreUrl));
-                    });
+                    Device.OpenUri(new Uri(appStoreUrl));
+                });
             }
         }
 
+        /// <summary>
+        /// Setups the toolbar items for iOS.
+        /// </summary>
         void SetupToolbarItemsForiOS()
         {
             if (Device.RuntimePlatform != Device.iOS)
@@ -292,6 +387,9 @@ namespace HGMF2018.Core
             _NavPage.ToolbarItems.Add(new ToolbarItem("Uber", "UberToolbar", () => _UberService.Open()));
         }
 
+        /// <summary>
+        /// Setups the toolbar items for android.
+        /// </summary>
         void SetupToolbarItemsForAndroid()
         {
             if (Device.RuntimePlatform != Device.Android)
@@ -307,7 +405,11 @@ namespace HGMF2018.Core
                 _NavPage.ToolbarItems.Add(new ToolbarItem("Uber", "UberToolbar", () => _UberService.Open()));
         }
 
-        async Task<bool> NewerVersionIsAvailable()
+        /// <summary>
+        /// Fetches a bool indicating whether or not there is a newer version of the app available.
+        /// </summary>
+        /// <returns>The bool indicating whether or not there is a newer version of the app available.</returns>
+        async Task<bool> FetchNewerVersionIsAvailable()
         {
             var availableVersionString = await FetchAvailableVersionStringAsync();
 
@@ -322,6 +424,10 @@ namespace HGMF2018.Core
             return (availableVersion > currentVersion);
         }
 
+        /// <summary>
+        /// Fetches the nav bar text;
+        /// </summary>
+        /// <returns>The nav bar text.</returns>
         async Task<string> FetchNavBarTextAsync()
         {
             var result = "#HGMF2018";
@@ -338,6 +444,10 @@ namespace HGMF2018.Core
             return result;
         }
 
+        /// <summary>
+        /// Fetches the banned domains.
+        /// </summary>
+        /// <returns>The banned domains.</returns>
         async Task<IEnumerable<string>> FetchBannedDomainsAsync()
         {
             var result = new List<string>();
@@ -356,6 +466,10 @@ namespace HGMF2018.Core
             return result;
         }
 
+        /// <summary>
+        /// Fetches the root URL.
+        /// </summary>
+        /// <returns>The root URL.</returns>
         async Task<string> FetchRootUrlAsync()
         {
             var result = "https://www.duluthhomegrown.org/";
@@ -372,6 +486,10 @@ namespace HGMF2018.Core
             return result;
         }
 
+        /// <summary>
+        /// Fetches the available version string.
+        /// </summary>
+        /// <returns>The available version string.</returns>
         async Task<string> FetchAvailableVersionStringAsync()
         {
             var result = "0.0.0";

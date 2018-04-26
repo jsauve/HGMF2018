@@ -1,11 +1,10 @@
-﻿using Android.App;
-using Firebase.Iid;
-using Android.Util;
-using WindowsAzure.Messaging;
-using HGMF2018.Core;
+﻿using System;
 using System.Collections.Generic;
-using System;
-using Xamarin.Forms;
+using Android.App;
+using Android.Util;
+using Firebase.Iid;
+using HGMF2018.Core;
+using WindowsAzure.Messaging;
 
 namespace HGMF2018.Droid
 {

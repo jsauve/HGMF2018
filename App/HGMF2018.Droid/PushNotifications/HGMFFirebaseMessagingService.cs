@@ -1,14 +1,11 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.Media;
 using Android.Util;
 using Firebase.Messaging;
-using System.Collections.Generic;
-using System.Linq;
-using Android.OS;
-using Android.Graphics;
-using Plugin.CurrentActivity;
 using HGMF2018.Core;
 
 namespace HGMF2018.Droid
@@ -105,18 +102,5 @@ namespace HGMF2018.Droid
 		{
             base.OnDeletedMessages();
 		}
-
-		void Vibrate()
-        {
-            var vibrator = (Vibrator)ApplicationContext.GetSystemService(VibratorService);
-            if ((int)Build.VERSION.SdkInt >= 26)
-            {
-                vibrator.Vibrate(VibrationEffect.CreateOneShot(150, 10));
-            }
-            else
-            {
-                vibrator.Vibrate(150);
-            }
-        }
     }
 }
