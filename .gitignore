@@ -41,6 +41,6 @@ Thumbs.db
 *.dotCover
 
 # ignore Settings.cs, so we don’t commit sensitive info to the repo
-*/*/Settings.cs
+Settings.cs
 
 google-services.json
